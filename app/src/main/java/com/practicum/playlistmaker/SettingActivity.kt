@@ -3,41 +3,27 @@ package com.practicum.playlistmaker
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class MainActivity : AppCompatActivity() {
+class SettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_setting)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val settingButton= findViewById<Button>(R.id.settings_button)
-        settingButton.setOnClickListener {
-            val displayIntent = Intent(this, SettingActivity::class.java)
-            startActivity(displayIntent)
-        }
-        val searchButton = findViewById<Button>(R.id.search_button)
-        searchButton.setOnClickListener{
-            val displayIntent = Intent(this, SearchActivity::class.java)
-            startActivity(displayIntent)
-        }
+        val arrowBackButton= findViewById <ImageView> (R.id.arrow_back)
 
-        val libraryButton = findViewById<Button>(R.id.library_button)
-        libraryButton.setOnClickListener{
-            val displayIntent = Intent(this, LibraryActivity::class.java)
+        arrowBackButton.setOnClickListener {
+            val displayIntent = Intent(this, MainActivity::class.java)
             startActivity(displayIntent)
         }
     }
-
 }
-
-
-
-
