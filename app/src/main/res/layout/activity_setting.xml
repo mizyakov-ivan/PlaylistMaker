@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    style="@style/MatchParentStyle"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="14dp">
+
+    <FrameLayout
+        style="@style/WrapContentStyle"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            style="@style/style_menuTitle"
+            android:text="@string/settings"
+            android:textColor="@color/black"
+            />
+
+        <ImageButton
+            android:id="@+id/arrow_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            app:srcCompat="@drawable/arrow_back"
+            android:layout_marginStart="16dp"/>
+    </FrameLayout>
+
+    <Switch
+        android:id="@+id/themeSwitcher"
+        style="@style/switcher_style"
+        android:text="@string/black_theme"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <Button
+        android:id="@+id/share_button"
+        style="@style/setting_button"
+        android:drawableEnd="@drawable/share"
+        android:text="@string/app_share"
+        />
+
+    <Button
+        android:id="@+id/help_button"
+        style="@style/setting_button"
+        android:drawableEnd="@drawable/support"
+        android:text="@string/help" />
+
+    <Button
+        android:id="@+id/user_agreement"
+        style="@style/setting_button"
+        android:drawableEnd="@drawable/arrow_forward"
+        android:text="@string/settings" />
+
+</LinearLayout>
+
