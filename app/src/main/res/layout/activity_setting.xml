@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     style="@style/MatchParentStyle"
-    android:background="@color/white"
     android:orientation="vertical"
     android:padding="14dp">
 
@@ -18,7 +17,6 @@
             android:layout_marginStart="52dp"
             style="@style/style_menuTitle"
             android:text="@string/settings"
-            android:textColor="@color/black"
             />
 
         <ImageButton
