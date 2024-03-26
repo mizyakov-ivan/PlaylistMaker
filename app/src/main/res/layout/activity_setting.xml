@@ -21,10 +21,7 @@
 
         <ImageButton
             android:id="@+id/arrow_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:background="@null"
+            style="@style/ArrowBackStyle"
             app:srcCompat="@drawable/arrow_back"
             android:layout_marginStart="16dp"/>
     </FrameLayout>
@@ -52,7 +49,7 @@
         android:id="@+id/user_agreement"
         style="@style/setting_button"
         android:drawableEnd="@drawable/arrow_forward"
-        android:text="@string/settings" />
+        android:text="@string/user_agreements" />
 
 </LinearLayout>
 
