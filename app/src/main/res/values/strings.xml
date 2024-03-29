@@ -7,4 +7,11 @@
     <string name="search">Поиск</string>
     <string name="library">Медиатека</string>
     <string name="user_agreements">Пользовательское соглашение</string>
+    <string name="email">mizyakov.ivan@yandex.ru</string>
+    <string name="theme_letter">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="text_letter">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="android_developer">https://practicum.yandex.ru/android-developer</string>
+    <string name="user_agreements_link">https://yandex.ru/legal/practicum_offer</string>
+    <string name="mail_to">mailto:</string>
+    <string name="text_plain">text/plain</string>
 </resources>

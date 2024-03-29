@@ -1,19 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    tools:context=".SearchActivity"
+    android:orientation="vertical"
+    android:padding="14dp">
 
-    <TextView
-        android:id="@+id/textView"
+    <FrameLayout
+        style="@style/WrapContentStyle"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            style="@style/style_menuTitle"
+            android:text="@string/search"
+            />
+
+        <ImageButton
+            android:id="@+id/arrow_back"
+            style="@style/ArrowBackStyle"
+            app:srcCompat="@drawable/arrow_back"
+            android:layout_marginStart="16dp"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_36dp"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        android:background="@color/light_gray"
+        android:drawableStart="@drawable/search"
+        android:drawablePadding="@dimen/s_padding"
+        android:drawableTint="@color/edit_text_icon"
+        android:hint="@string/search"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLength="30"
+        android:paddingStart="@dimen/padding_12"
+        android:paddingEnd="@dimen/padding_12"
+        android:textColor="@color/black"
+        android:textColorHint="@color/edit_text_icon"
+        android:textCursorDrawable="@drawable/edit_text_cursor"
+        app:iconTint="@color/edit_text_icon" />
+    <ImageView
+        android:id="@+id/clearIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Поиск"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:src="@drawable/cross"
+        android:layout_gravity="end"
+        android:paddingEnd="@dimen/_28dp"
+        android:paddingTop="@dimen/_10dp"
+        app:tint="@color/edit_text_icon"
+        android:visibility="gone" />
+    </FrameLayout>
+
+
+</LinearLayout>
