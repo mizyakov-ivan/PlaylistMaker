@@ -31,7 +31,6 @@ class SettingActivity : AppCompatActivity() {
         }
 
         val switchTheme = findViewById<Switch>(R.id.themeSwitcher)
-
         switchTheme.isChecked = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
         switchTheme.setOnCheckedChangeListener { _ , isChecked ->
             if (isChecked) {
@@ -42,7 +41,6 @@ class SettingActivity : AppCompatActivity() {
         }
 
         fun showShareDialog() {
-
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = resources.getString(R.string.text_plain)
             intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.android_developer))

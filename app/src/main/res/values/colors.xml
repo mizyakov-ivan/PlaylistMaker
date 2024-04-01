@@ -8,4 +8,5 @@
     <color name="background_light">#3772e7</color>
     <color name="edit_text_icon">#1A1B22</color>
     <color name="DN_White">#FFFFFF</color>
+    <color name="full_gray">#AEAFB4</color>
 </resources>
