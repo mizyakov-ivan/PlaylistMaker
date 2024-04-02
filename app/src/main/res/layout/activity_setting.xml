@@ -23,6 +23,7 @@
             android:id="@+id/arrow_back"
             style="@style/ArrowBackStyle"
             app:srcCompat="@drawable/arrow_back"
+            android:layout_height="match_parent"
             android:layout_marginStart="16dp"/>
     </FrameLayout>
 

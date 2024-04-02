@@ -26,8 +26,7 @@ class SettingActivity : AppCompatActivity() {
         val arrowBackButton= findViewById <ImageView> (R.id.arrow_back)
 
         arrowBackButton.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            finish()
         }
 
         val switchTheme = findViewById<Switch>(R.id.themeSwitcher)
@@ -49,7 +48,6 @@ class SettingActivity : AppCompatActivity() {
 
         val shareButton = findViewById<Button>(R.id.share_button)
         shareButton.setOnClickListener {
-            // Handle button click event here
             showShareDialog()
         }
 

@@ -7,7 +7,7 @@
     <dimen name="s_height">61dp</dimen>
     <dimen name="s_icon_size">24dp</dimen>
     <dimen name="s_text_size">16sp</dimen>
-    <dimen name="_16dp">16dp</dimen>
+    <dimen name="_16dp">14dp</dimen>
     <dimen name="ma_button_padding">8dp</dimen>
     <dimen name="s_medium_padding">24dp</dimen>
     <dimen name="s_padding">8dp</dimen>

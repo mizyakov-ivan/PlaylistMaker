@@ -11,20 +11,20 @@
     <FrameLayout
         android:layout_marginTop="20dp"
         style="@style/WrapContentStyle"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="16dp">
 
         <TextView
             style="@style/style_menuTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="52dp"
+            android:layout_marginStart="36dp"
             android:gravity="center_vertical"
             android:text="@string/search" />
 
         <ImageButton
             android:id="@+id/arrow_back"
             style="@style/ArrowBackStyle"
-            android:layout_marginStart="16dp"
+            android:layout_height="match_parent"
             app:srcCompat="@drawable/arrow_back" />
     </FrameLayout>
 
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/cross" />
 
     </FrameLayout>
