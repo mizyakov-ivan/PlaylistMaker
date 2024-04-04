@@ -14,4 +14,8 @@
     <string name="user_agreements_link">https://yandex.ru/legal/practicum_offer</string>
     <string name="mail_to">mailto:</string>
     <string name="text_plain">text/plain</string>
+    <string name="error_no_app_to_share_message">У вас нет подходящего приложения</string>
+    <string name="error_no_app_to_send_email">У вас нет приложения почтового клиента</string>
+    <string name="error_no_app_browser">У вас нет браузера для открытия ссылки</string>
+
 </resources>
