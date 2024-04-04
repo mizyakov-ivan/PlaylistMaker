@@ -6,4 +6,16 @@
     <string name="help">Написать в поддержку</string>
     <string name="search">Поиск</string>
     <string name="library">Медиатека</string>
+    <string name="user_agreements">Пользовательское соглашение</string>
+    <string name="email">mizyakov.ivan@yandex.ru</string>
+    <string name="theme_letter">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="text_letter">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="android_developer">https://practicum.yandex.ru/android-developer</string>
+    <string name="user_agreements_link">https://yandex.ru/legal/practicum_offer</string>
+    <string name="mail_to">mailto:</string>
+    <string name="text_plain">text/plain</string>
+    <string name="error_no_app_to_share_message">У вас нет подходящего приложения</string>
+    <string name="error_no_app_to_send_email">У вас нет приложения почтового клиента</string>
+    <string name="error_no_app_browser">У вас нет браузера для открытия ссылки</string>
+
 </resources>

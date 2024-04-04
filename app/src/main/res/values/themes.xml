@@ -1,9 +1,8 @@
-<resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Основные настройки темы -->
-        <item name="android:background">@color/bright_blue</item>
-        <!-- Другие настройки темы -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme -->
+    <style name="LightTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="background">@color/bright_blue</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
     </style>
-
-
 </resources>
