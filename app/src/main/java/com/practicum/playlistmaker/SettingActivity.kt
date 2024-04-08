@@ -46,11 +46,7 @@ class SettingActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = resources.getString(R.string.text_plain)
             intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.android_developer))
-            try {
-                startActivity(Intent.createChooser(intent, resources.getString(R.string.app_share)))
-            } catch (e: ActivityNotFoundException) {
-                Toast.makeText(this, resources.getString(R.string.error_no_app_to_share_message), Toast.LENGTH_SHORT).show()
-            }
+            startIntent(intent, resources.getString(R.string.app_share))
         }
 
         val supportButton = findViewById<Button>(R.id.help_button)
@@ -62,21 +58,24 @@ class SettingActivity : AppCompatActivity() {
                 putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.theme_letter))
                 putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.text_letter))
             }
-            try {
-                startActivity(Intent.createChooser(supportIntent, resources.getString(R.string.help)))
-            } catch (e: ActivityNotFoundException) {
-                Toast.makeText(this, resources.getString(R.string.error_no_app_to_send_email), Toast.LENGTH_SHORT).show()
-            }
+            startIntent(supportIntent, resources.getString(R.string.help))
         }
 
         val agreementButton = findViewById<Button>(R.id.user_agreement)
         agreementButton.setOnClickListener {
             try {
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.user_agreements_link)))
-                startActivity(browserIntent)
+                startIntent(browserIntent, resources.getString(R.string.error_no_app_browser))
             } catch (e: ActivityNotFoundException) {
-                Toast.makeText(this, R.string.error_no_app_browser, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, resources.getString(R.string.error_no_app_browser), Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+    private fun startIntent(intent: Intent, message: String) {
+        try {
+            startActivity(Intent.createChooser(intent, message))
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
     }
 }
