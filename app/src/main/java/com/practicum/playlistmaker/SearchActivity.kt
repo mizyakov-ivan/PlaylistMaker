@@ -2,76 +2,133 @@ package com.practicum.playlistmaker
 
 import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.Track
-import com.example.playlistmaker.TrackAdapter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
-    private var searchQuery: String = ""
+    private var editText: EditText? = null
+    private var text: String = EMPTY
+    private val baseUrl = "https://itunes.apple.com"
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val iTunesService = retrofit.create(ITunesAPI::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_search)
-
-        val editText = findViewById<EditText>(R.id.editText)
-        val clearButton = findViewById<ImageView>(R.id.clear_bottom)
-        val arrowBackButton = findViewById<ImageView>(R.id.arrow_back)
-
-        val trackList: ArrayList<Track> = ArrayList()
-        trackList.add(Track("Smells Like Teen Spirit", "Nirvana", "5:01", getString(R.string.smells_like)))
-        trackList.add(Track("Billie Jean", "Michael Jackson", "4:35", getString(R.string.billie_jean)))
-        trackList.add(Track("Stayin' Alive", "Bee Gees", "4:10", getString(R.string.stayin_alive)))
-        trackList.add(Track("Whole Lotta Love", "Led Zeppelin", "5:33", getString(R.string.whole_lotta)))
-        trackList.add(Track("Sweet Child O'Mine", "Guns N' Roses", "5:03", getString(R.string.sweet_child)))
-
-        arrowBackButton.setOnClickListener {
-            finish()
-        }
-        editText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                searchQuery = editText.text.toString()
-                clearButton.isVisible = searchQuery.isNotEmpty()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-        clearButton.isVisible = false
-
-        clearButton.setOnClickListener {
-            editText.setText("")
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(editText.windowToken, 0)
-        }
+        editText = findViewById(R.id.editText)
         val tracksRecycler = findViewById<RecyclerView>(R.id.track_recycler)
+        tracksRecycler.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val notFound = findViewById<LinearLayout>(R.id.not_found)
+        val backButton = findViewById<ImageView>(R.id.backArrowImageView)
+        val noInternet = findViewById<LinearLayout>(R.id.no_internet)
+        val refreshButton = findViewById<Button>(R.id.refresh_button)
 
-        tracksRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        tracksRecycler.adapter = TrackAdapter(trackList)
+        backButton.setOnClickListener {
+            val backIntent = Intent(this, MainActivity::class.java)
+            startActivity(backIntent)
+        }
+        val clearButton = findViewById<ImageView>(R.id.clearImageView)
+        clearButton.setOnClickListener {
+            editText!!.setText(EMPTY)
+            tracksRecycler.adapter = TrackAdapter(listOf())
+            notFound.visibility = View.GONE
+            noInternet.visibility = View.GONE
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(editText!!.windowToken, 0)
+        }
+        val simpleTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                clearButton.visibility = clearButtonVisibility(p0)
+            }
+            override fun afterTextChanged(p0: Editable?) {
+                text = p0.toString()
+            }
+        }
+        editText!!.addTextChangedListener(simpleTextWatcher)
+
+        fun apiRequest(text: String){
+            iTunesService.getTrack(text)
+                .enqueue(object : Callback<ResponseTracks> {
+                    override fun onResponse(
+                        call: Call<ResponseTracks>,
+                        response: Response<ResponseTracks>
+                    ) {
+                        when (response.code()) {
+                                200 -> {
+                                    if (response.body()?.results?.size == 0) {
+                                        notFound.visibility = View.VISIBLE
+                                    } else {
+                                        val tracks = response.body()?.results
+                                        tracksRecycler.adapter = TrackAdapter(tracks!!)
+                                    }
+                                }
+                            else -> {
+                                noInternet.visibility = View.VISIBLE
+                            }
+                            }
+                        }
+                    override fun onFailure(call: Call<ResponseTracks>, t: Throwable) {
+                        noInternet.visibility = View.VISIBLE
+                        }
+                    })
+        }
+
+        editText!!.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                apiRequest(text)
+                true
+            }
+            false
+        }
+
+        refreshButton.setOnClickListener() {
+            apiRequest(text)
+            noInternet.visibility = View.GONE
+        }
+
     }
-
+    private fun clearButtonVisibility(s: CharSequence?): Int {
+        return if (s.isNullOrEmpty()) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
+    }
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString("searchQuery", searchQuery)
         super.onSaveInstanceState(outState)
+        outState.putString(KEY, text)
     }
-
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        searchQuery = savedInstanceState.getString("searchQuery", "")
-        val editText = findViewById<EditText>(R.id.editText)
-        editText.setText(searchQuery)
+        val restoredText = savedInstanceState.getString(KEY)
+        editText!!.setText(restoredText)
+    }
+    companion object {
+        private const val KEY = "text"
+        private const val EMPTY = ""
     }
 }

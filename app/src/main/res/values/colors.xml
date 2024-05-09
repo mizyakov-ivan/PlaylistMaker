@@ -10,4 +10,5 @@
     <color name="DN_White">#FFFFFF</color>
     <color name="full_gray">#AEAFB4</color>
     <color name="background_color">#3772e7</color>
+    <color name="edit_text_background">#FFFFFF</color>
 </resources>
