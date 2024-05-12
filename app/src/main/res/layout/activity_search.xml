@@ -67,68 +67,68 @@
     </LinearLayout>
 
 
-<LinearLayout
-android:id="@+id/not_found"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:layout_gravity="center"
-android:visibility="gone">
-<ImageView
-    style="@style/notFindPlaceholder"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center" />
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/_16dp"
-    android:layout_gravity="center"
-    android:text="@string/notFind"
-    android:textColor="@color/black"
-    android:textSize="@dimen/size_19sp"/>
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/not_found"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:visibility="gone">
+        <ImageView
+            style="@style/notFindPlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_16dp"
+            android:layout_gravity="center"
+            android:text="@string/notFind"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_19sp"/>
+    </LinearLayout>
 
-<LinearLayout
-android:id="@+id/no_internet"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:layout_gravity="center"
-android:visibility="gone">
-<ImageView
-    style="@style/noInternetPlaceholder"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center" />
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/_16dp"
-    android:layout_gravity="center"
-    android:text="@string/connection_lost"
-    android:textColor="@color/black"
-    android:textSize="@dimen/size_19sp"/>
+    <LinearLayout
+        android:id="@+id/no_internet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:visibility="gone">
+        <ImageView
+            style="@style/noInternetPlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_16dp"
+            android:layout_gravity="center"
+            android:text="@string/connection_lost"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_19sp"/>
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/_16dp"
-    android:gravity="center"
-    android:text="@string/no_internet"
-    android:textColor="@color/black"
-    android:textSize="@dimen/size_19sp"/>
-<Button
-    android:id="@+id/refresh_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:backgroundTint="@color/black"
-    app:cornerRadius = "@dimen/radius_54dp"
-    android:text="@string/refresh"
-    android:textColor="@color/white"
-    android:textAllCaps="false"
-    android:textSize="@dimen/size_14sp"/>
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_16dp"
+            android:gravity="center"
+            android:text="@string/no_internet"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_19sp"/>
+        <Button
+            android:id="@+id/refresh_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/black"
+            app:cornerRadius = "@dimen/radius_54dp"
+            android:text="@string/refresh"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="@dimen/size_14sp"/>
+    </LinearLayout>
 
-    </FrameLayout>
+</FrameLayout>

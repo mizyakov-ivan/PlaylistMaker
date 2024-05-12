@@ -37,22 +37,26 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         editText = findViewById(R.id.editText)
-        val tracksRecycler = findViewById<RecyclerView>(R.id.track_recycler)
-        tracksRecycler.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         val notFound = findViewById<LinearLayout>(R.id.not_found)
-        val backButton = findViewById<ImageView>(R.id.backArrowImageView)
         val noInternet = findViewById<LinearLayout>(R.id.no_internet)
         val refreshButton = findViewById<Button>(R.id.refresh_button)
-
+        val tracksRecycler = findViewById<RecyclerView>(R.id.track_recycler)
+        val tracks = mutableListOf<Track>()
+        val adapter = TrackAdapter(tracks)
+        tracksRecycler.adapter = adapter
+        tracksRecycler.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val backButton = findViewById<ImageView>(R.id.backArrowImageView)
         backButton.setOnClickListener {
             val backIntent = Intent(this, MainActivity::class.java)
             startActivity(backIntent)
         }
         val clearButton = findViewById<ImageView>(R.id.clearImageView)
+
         clearButton.setOnClickListener {
             editText!!.setText(EMPTY)
-            tracksRecycler.adapter = TrackAdapter(listOf())
+            tracks.clear()
+            adapter.notifyDataSetChanged()
             notFound.visibility = View.GONE
             noInternet.visibility = View.GONE
             val inputMethodManager =
@@ -70,31 +74,43 @@ class SearchActivity : AppCompatActivity() {
         }
         editText!!.addTextChangedListener(simpleTextWatcher)
 
-        fun apiRequest(text: String){
+        fun apiRequest(text: String) {
             iTunesService.getTrack(text)
                 .enqueue(object : Callback<ResponseTracks> {
+
                     override fun onResponse(
                         call: Call<ResponseTracks>,
                         response: Response<ResponseTracks>
                     ) {
-                        when (response.code()) {
-                                200 -> {
-                                    if (response.body()?.results?.size == 0) {
-                                        notFound.visibility = View.VISIBLE
-                                    } else {
-                                        val tracks = response.body()?.results
-                                        tracksRecycler.adapter = TrackAdapter(tracks!!)
-                                    }
-                                }
-                            else -> {
-                                noInternet.visibility = View.VISIBLE
+                        val tracksFromResp = response.body()?.results
+
+                        if (response.isSuccessful && tracksFromResp != null) {
+                            if (tracksFromResp.isEmpty()) {
+                                notFound.visibility = View.VISIBLE
+                                noInternet.visibility = View.GONE
+                                tracks.clear()
+                            } else {
+                                tracks.clear()
+                                tracks.addAll(tracksFromResp.toMutableList())
+                                notFound.visibility = View.GONE
+                                noInternet.visibility = View.GONE
                             }
-                            }
+                        } else {
+                            tracks.clear()
+                            noInternet.visibility = View.VISIBLE
+                            notFound.visibility = View.GONE
                         }
+                        adapter.notifyDataSetChanged()
+                    }
+
                     override fun onFailure(call: Call<ResponseTracks>, t: Throwable) {
                         noInternet.visibility = View.VISIBLE
-                        }
-                    })
+                        notFound.visibility = View.GONE
+                        tracks.clear()
+                        adapter.notifyDataSetChanged()
+                    }
+                })
+
         }
 
         editText!!.setOnEditorActionListener { _, actionId, _ ->
@@ -105,7 +121,7 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        refreshButton.setOnClickListener() {
+        refreshButton.setOnClickListener {
             apiRequest(text)
             noInternet.visibility = View.GONE
         }
