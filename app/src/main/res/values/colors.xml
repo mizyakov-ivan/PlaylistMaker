@@ -11,4 +11,6 @@
     <color name="full_gray">#AEAFB4</color>
     <color name="background_color">#3772e7</color>
     <color name="edit_text_background">#FFFFFF</color>
+    <color name="switch_Thumb">#AEAFB4</color>
+    <color name="switch_Track">#E6E8EB</color>
 </resources>

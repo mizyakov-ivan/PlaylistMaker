@@ -14,6 +14,10 @@ import android.content.SharedPreferences
 import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.switchmaterial.SwitchMaterial
+
+const val THEME_KEY = "key_for_theme"
+const val THEME = "day_night_theme"
 
 class SettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +44,7 @@ class SettingActivity : AppCompatActivity() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
+
 
         val shareButton = findViewById<Button>(R.id.share_button)
         shareButton.setOnClickListener {
