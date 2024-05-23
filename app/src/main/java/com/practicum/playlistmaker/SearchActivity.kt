@@ -60,6 +60,16 @@ class SearchActivity : AppCompatActivity() {
 
         historyLayout.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
 
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                historyLayout.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+
         val historyAdapter = TrackAdapter(searchHistory.historyList) {track -> searchHistory.addTrack(track) }
         historyRecycler.adapter = historyAdapter
         historyRecycler.layoutManager =
@@ -70,11 +80,14 @@ class SearchActivity : AppCompatActivity() {
         tracksRecycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
+
         val clearHistory = findViewById<Button>(R.id.clear_history)
-        clearHistory.setOnClickListener{
-            historyPrefs.edit().clear().apply()
-            searchHistory.historyList.clear()
-            historyLayout.visibility = View.GONE
+        clearHistory.setOnClickListener {
+            if (searchHistory.historyList.isNotEmpty()) {
+                historyPrefs.edit().clear().apply()
+                searchHistory.historyList.clear()
+                historyLayout.visibility = View.GONE
+            }
             historyAdapter.notifyDataSetChanged()
         }
 
@@ -185,4 +198,6 @@ class SearchActivity : AppCompatActivity() {
         private const val KEY = "text"
         private const val EMPTY = ""
     }
+
+
 }

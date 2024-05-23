@@ -84,12 +84,8 @@
                 android:visibility="visible">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingTop="@dimen/_8dp"
+                    style="@style/titleTextView"
                     android:text="@string/searched"
-                    android:textColor="@color/black"
                     android:textSize="@dimen/size_19sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -100,16 +96,15 @@
 
                 <Button
                     android:id="@+id/clear_history"
+                    style="@style/action_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/_16dp"
-                    android:backgroundTint="@color/black"
                     android:paddingHorizontal="@dimen/_16dp"
                     android:paddingVertical="@dimen/_10dp"
                     android:text="@string/history_clear_button"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
                     android:textSize="@dimen/size_14sp"
                     app:cornerRadius="@dimen/radius_54dp" />
 
@@ -133,21 +128,23 @@
             android:layout_gravity="center" />
 
         <TextView
+            style="@style/notFindPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingTop="@dimen/_16dp"
             android:text="@string/notFind"
-            android:textColor="@color/black"
             android:textSize="@dimen/size_19sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/no_internet"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
 
         <ImageView
             style="@style/noInternetPlaceholder"
@@ -156,21 +153,21 @@
             android:layout_gravity="center" />
 
         <TextView
+            style="@style/noInternetPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingTop="@dimen/_16dp"
             android:text="@string/connection_lost"
-            android:textColor="@color/black"
             android:textSize="@dimen/size_19sp" />
 
         <TextView
+            style="@style/noInternetPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="@dimen/_16dp"
             android:text="@string/no_internet"
-            android:textColor="@color/black"
             android:textSize="@dimen/size_19sp"
             tools:ignore="HardcodedText" />
 
@@ -180,10 +177,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_16dp"
-            android:backgroundTint="@color/black"
+            style="@style/action_button"
             android:text="@string/refresh"
             android:textAllCaps="false"
-            android:textColor="@color/white"
             android:textSize="@dimen/size_14sp"
             app:cornerRadius="@dimen/radius_54dp" />
     </LinearLayout>
