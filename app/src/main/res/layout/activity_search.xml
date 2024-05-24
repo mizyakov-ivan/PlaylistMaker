@@ -1,29 +1,34 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/s_medium_padding">
+
             <ImageView
                 android:id="@+id/backArrowImageView"
                 style="@style/backButton" />
+
             <TextView
                 style="@style/titleTextView"
                 android:text="@string/search" />
         </LinearLayout>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <EditText
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
@@ -35,100 +40,148 @@
                 android:drawablePadding="@dimen/s_padding"
                 android:drawableTint="@color/edit_text_icon"
                 android:hint="@string/search"
+                android:imeOptions="actionDone"
                 android:inputType="text"
                 android:lines="1"
                 android:maxLength="30"
                 android:paddingStart="@dimen/padding_12"
                 android:paddingEnd="@dimen/padding_12"
+                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/edit_text_icon"
                 android:textCursorDrawable="@drawable/edit_text_cursor"
-                android:imeOptions="actionDone"
-                android:singleLine="true"
                 app:iconTint="@color/edit_text_icon" />
+
             <ImageView
                 android:id="@+id/clearImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/cross"
                 android:layout_gravity="end"
-                android:paddingEnd="@dimen/_28dp"
                 android:paddingTop="@dimen/_10dp"
-                app:tint="@color/edit_text_icon"
-                android:visibility="gone" />
+                android:paddingEnd="@dimen/_28dp"
+                android:src="@drawable/cross"
+                android:visibility="gone"
+                app:tint="@color/edit_text_icon" />
+
         </FrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
-            android:paddingTop="@dimen/s_padding"
             android:id="@+id/track_recycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/s_padding"
+            android:visibility="visible" />
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/history_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    style="@style/titleTextView"
+                    android:text="@string/searched"
+                    android:textSize="@dimen/size_19sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/history_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/s_padding" />
+
+                <Button
+                    android:id="@+id/clear_history"
+                    style="@style/action_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_16dp"
+                    android:paddingHorizontal="@dimen/_16dp"
+                    android:paddingVertical="@dimen/_10dp"
+                    android:text="@string/history_clear_button"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/size_14sp"
+                    app:cornerRadius="@dimen/radius_54dp" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
-
-
     <LinearLayout
         android:id="@+id/not_found"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="center"
+        android:orientation="vertical"
         android:visibility="gone">
+
         <ImageView
             style="@style/notFindPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
+
         <TextView
+            style="@style/notFindPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/_16dp"
             android:layout_gravity="center"
+            android:paddingTop="@dimen/_16dp"
             android:text="@string/notFind"
-            android:textColor="@color/black"
-            android:textSize="@dimen/size_19sp"/>
+            android:textSize="@dimen/size_19sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/no_internet"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="center"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
+
         <ImageView
             style="@style/noInternetPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/_16dp"
-            android:layout_gravity="center"
-            android:text="@string/connection_lost"
-            android:textColor="@color/black"
-            android:textSize="@dimen/size_19sp"/>
 
         <TextView
+            style="@style/noInternetPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:paddingTop="@dimen/_16dp"
+            android:text="@string/connection_lost"
+            android:textSize="@dimen/size_19sp" />
+
+        <TextView
+            style="@style/noInternetPlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingTop="@dimen/_16dp"
             android:text="@string/no_internet"
-            android:textColor="@color/black"
-            android:textSize="@dimen/size_19sp"/>
+            android:textSize="@dimen/size_19sp"
+            tools:ignore="HardcodedText" />
+
         <Button
             android:id="@+id/refresh_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:backgroundTint="@color/black"
-            app:cornerRadius = "@dimen/radius_54dp"
+            android:layout_marginTop="@dimen/_16dp"
+            style="@style/action_button"
             android:text="@string/refresh"
-            android:textColor="@color/white"
             android:textAllCaps="false"
-            android:textSize="@dimen/size_14sp"/>
+            android:textSize="@dimen/size_14sp"
+            app:cornerRadius="@dimen/radius_54dp" />
     </LinearLayout>
 
 </FrameLayout>

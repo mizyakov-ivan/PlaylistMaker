@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    style="@style/MatchParentStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="14dp">
 
@@ -27,11 +28,17 @@
             android:layout_marginStart="16dp"/>
     </FrameLayout>
 
-    <Switch
-        android:id="@+id/themeSwitcher"
-        style="@style/switcher_style"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginHorizontal="@dimen/_16dp"
+        android:saveEnabled="false"
         android:text="@string/black_theme"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        android:textSize="@dimen/t_size_16"
+        app:thumbTint="@color/switch_Thumb"
+        app:trackTint="@color/switch_Track"/>
 
     <Button
         android:id="@+id/share_button"
