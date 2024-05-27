@@ -72,9 +72,6 @@
             android:paddingTop="@dimen/s_padding"
             android:visibility="visible" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/history_layout"
@@ -92,7 +89,8 @@
                     android:id="@+id/history_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/s_padding" />
+                    android:paddingTop="@dimen/s_padding"
+                    android:layout_weight="1"/>
 
                 <Button
                     android:id="@+id/clear_history"
@@ -109,8 +107,6 @@
                     app:cornerRadius="@dimen/radius_54dp" />
 
             </LinearLayout>
-
-        </ScrollView>
 
     </LinearLayout>
     <LinearLayout

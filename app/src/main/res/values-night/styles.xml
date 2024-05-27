@@ -150,4 +150,21 @@
     <style name="color_track_artist_time">
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="play_button">
+        <item name="android:src">@drawable/play_button_night</item>
+    </style>
+
+    <style name="add_to_collection_button">
+        <item name="android:src">@drawable/add_to_collection_button_night</item>
+    </style>
+
+    <style name="add_to_favorites_button">
+        <item name="android:src">@drawable/add_to_favorites_button_night</item>
+    </style>
+
+    <style name="player_text">
+        <item name="android:textSize">@dimen/t_size_13</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>
