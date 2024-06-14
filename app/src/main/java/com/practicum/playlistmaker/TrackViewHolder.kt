@@ -25,6 +25,6 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         textTrackName.text = model.trackName
         textArtist.text = model.artistName
 
-        textTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
+        textTime.text = model.trackTime
     }
 }

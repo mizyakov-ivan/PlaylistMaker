@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
+import com.google.gson.Gson
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -34,10 +35,11 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     private val iTunesService = retrofit.create(ITunesAPI::class.java)
-
+    private lateinit var historyAdapter: TrackAdapter
     override fun onStop() {
         super.onStop()
         searchHistory.putTracks()
+        historyAdapter.notifyDataSetChanged()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,11 +56,31 @@ class SearchActivity : AppCompatActivity() {
         val historyPrefs = getSharedPreferences(HISTORY_KEY, MODE_PRIVATE)
         searchHistory = SearchHistory(historyPrefs)
         searchHistory.getTracks()
-        val adapter = TrackAdapter(tracks) { track -> searchHistory.addTrack(track) }
+        val playerIntent = Intent(this, PlayerActivity::class.java)
+        val adapter = TrackAdapter(
+            tracks,
+            callback = { track ->
+                run {
+                    searchHistory.addTrack(track)
+                    startActivity(playerIntent.putExtra(INTENT_KEY, track))
+                }
+            }
+        )
 
         val historyRecycler = findViewById<RecyclerView>(R.id.history_recycler)
 
-        historyLayout.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
+        historyLayout.visibility =
+            if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
+
+        historyAdapter = TrackAdapter(
+            searchHistory.historyList,
+            callback = { track ->
+                run {
+                    searchHistory.addTrack(track)
+                    startActivity(playerIntent.putExtra(INTENT_KEY, track))
+                }
+            }
+        )
 
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -70,7 +92,7 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        val historyAdapter = TrackAdapter(searchHistory.historyList) {track -> searchHistory.addTrack(track) }
+
         historyRecycler.adapter = historyAdapter
         historyRecycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -93,8 +115,7 @@ class SearchActivity : AppCompatActivity() {
 
         val backButton = findViewById<ImageView>(R.id.backArrowImageView)
         backButton.setOnClickListener {
-            val backIntent = Intent(this, MainActivity::class.java)
-            startActivity(backIntent)
+            finish()
         }
         val clearButton = findViewById<ImageView>(R.id.clearImageView)
 
@@ -113,7 +134,8 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 clearButton.visibility = clearButtonVisibility(p0)
-                if (editText.hasFocus() && p0?.isEmpty() == false) historyLayout.visibility = View.GONE
+                if (editText.hasFocus() && p0?.isEmpty() == false) historyLayout.visibility =
+                    View.GONE
                 else {
                     historyLayout.visibility = View.VISIBLE
                     historyAdapter.notifyDataSetChanged()
@@ -167,7 +189,6 @@ class SearchActivity : AppCompatActivity() {
         editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 apiRequest(text)
-                true
             }
             false
         }
@@ -197,6 +218,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val KEY = "text"
         private const val EMPTY = ""
+        const val INTENT_KEY = "key"
     }
 
 

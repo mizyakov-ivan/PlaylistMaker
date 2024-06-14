@@ -18,8 +18,7 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_setting)
         val backButton = findViewById<ImageView>(R.id.arrow_back)
         backButton.setOnClickListener {
-            val backIntent = Intent(this, MainActivity::class.java)
-            startActivity(backIntent)
+            finish()
         }
         val switchTheme = findViewById<SwitchMaterial>(R.id.switchTheme)
         val sharedPrefs = getSharedPreferences(THEME, MODE_PRIVATE)
