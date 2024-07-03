@@ -16,6 +16,7 @@
     <dimen name="_8dp">8dp</dimen>
     <dimen name="_28dp">28dp</dimen>
     <dimen name="_10dp">10dp</dimen>
+    <dimen name="_38dp">38dp</dimen>
     <dimen name="_48dp">48dp</dimen>
     <dimen name="corner_2">2dp</dimen>
     <dimen name="size_45">45dp</dimen>

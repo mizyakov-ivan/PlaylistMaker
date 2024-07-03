@@ -79,7 +79,8 @@
         app:layout_constraintStart_toEndOf="@id/leftBorder"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
         app:layout_constraintBottom_toTopOf="@id/playTime"
-        android:layout_marginTop="38dp"/>
+        android:layout_marginTop="@dimen/_38dp"
+        android:visibility="visible"/>
 
     <ImageView
         android:id="@+id/addToCollectionButton"
