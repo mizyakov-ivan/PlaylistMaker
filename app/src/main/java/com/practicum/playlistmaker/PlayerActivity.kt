@@ -22,7 +22,6 @@ class PlayerActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-
     }
 
     private var handler: Handler? = null
@@ -82,12 +81,15 @@ class PlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         pausePlayer()
+        handler?.removeCallbacksAndMessages(null)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        handler?.removeCallbacksAndMessages(null)
         mediaPlayer.release()
     }
+
     private fun preparePlayer() {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
@@ -104,7 +106,7 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer.start()
         playButton.setImageResource(R.drawable.pause_button)
         playerState = STATE_PLAYING
-        startTimer()
+        handler?.post(updateTimer())
     }
 
     private fun pausePlayer() {
@@ -125,18 +127,12 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun startTimer() {
-        startTime = System.currentTimeMillis()
-        handler?.post(updateTimer(startTime))
-    }
-
-    private fun updateTimer(start: Long): Runnable {
+    private fun updateTimer(): Runnable {
         return object : Runnable {
             override fun run() {
                 if (playerState == STATE_PLAYING) {
-                    val current = System.currentTimeMillis()
-                    val time = current - start
-                    playTime.text = formatMilliseconds(time)
+                    val elapsedTime = mediaPlayer.getCurrentPosition()
+                    playTime.text = formatMilliseconds(elapsedTime.toLong())
                     handler?.postDelayed(this, 1000L)
                 }
             }

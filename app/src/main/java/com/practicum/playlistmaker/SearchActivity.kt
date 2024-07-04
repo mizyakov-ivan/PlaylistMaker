@@ -77,8 +77,8 @@ class SearchActivity : AppCompatActivity() {
         adapter = TrackAdapter(
             tracks,
             callback = { track ->
-                searchHistory.addTrack(track)
                 if (clickDebounce()) {
+                    searchHistory.addTrack(track)
                     startActivity(playerIntent.putExtra(INTENT_KEY, track))
                 }
             }
@@ -92,8 +92,8 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter = TrackAdapter(
             searchHistory.historyList,
             callback = { track ->
-                searchHistory.addTrack(track)
                 if (clickDebounce()) {
+                    searchHistory.addTrack(track)
                     startActivity(playerIntent.putExtra(INTENT_KEY, track))
                 }
             }
@@ -185,7 +185,12 @@ class SearchActivity : AppCompatActivity() {
 
     }
     private fun apiRequest(text: String) {
+        tracksRecycler.visibility = View.INVISIBLE
+        notFound.visibility = View.INVISIBLE
+        noInternet.visibility = View.INVISIBLE
+        historyLayout.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
+
         iTunesService.getTrack(text)
             .enqueue(object : Callback<ResponseTracks> {
 
@@ -196,23 +201,14 @@ class SearchActivity : AppCompatActivity() {
                     val tracksFromResp = response.body()?.results
 
                     if (response.isSuccessful && tracksFromResp != null) {
-                        if (tracksFromResp.isEmpty()) {
-                            progressBar.visibility = View.GONE
-                            notFound.visibility = View.VISIBLE
-                            noInternet.visibility = View.GONE
-                            tracks.clear()
-                        } else {
-                            progressBar.visibility = View.GONE
-                            tracks.clear()
-                            tracks.addAll(tracksFromResp.toMutableList())
-                            notFound.visibility = View.GONE
-                            noInternet.visibility = View.GONE
-                        }
+                        tracks.clear()
+                        tracks.addAll(tracksFromResp.toMutableList())
+                        progressBar.visibility = View.GONE
+                        tracksRecycler.visibility = if (tracks.isEmpty()) View.INVISIBLE else View.VISIBLE
+                        notFound.visibility = if (tracks.isEmpty()) View.VISIBLE else View.INVISIBLE
                     } else {
                         progressBar.visibility = View.GONE
-                        tracks.clear()
                         noInternet.visibility = View.VISIBLE
-                        notFound.visibility = View.GONE
                     }
                     adapter.notifyDataSetChanged()
                 }
@@ -220,12 +216,9 @@ class SearchActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<ResponseTracks>, t: Throwable) {
                     progressBar.visibility = View.GONE
                     noInternet.visibility = View.VISIBLE
-                    notFound.visibility = View.GONE
-                    tracks.clear()
                     adapter.notifyDataSetChanged()
                 }
             })
-
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
