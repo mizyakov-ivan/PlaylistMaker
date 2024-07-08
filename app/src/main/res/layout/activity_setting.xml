@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="14dp">
+    android:paddingTop="14dp">
 
     <FrameLayout
         style="@style/WrapContentStyle"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="40dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -23,9 +23,10 @@
         <ImageButton
             android:id="@+id/arrow_back"
             style="@style/ArrowBackStyle"
-            app:srcCompat="@drawable/arrow_back"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"/>
+            android:paddingStart="16dp"
+            app:srcCompat="@drawable/arrow_back" />
     </FrameLayout>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -33,12 +34,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginHorizontal="@dimen/_16dp"
+        android:layout_marginVertical="16dp"
         android:saveEnabled="false"
         android:text="@string/black_theme"
         android:textSize="@dimen/t_size_16"
         app:thumbTint="@color/switch_Thumb"
-        app:trackTint="@color/switch_Track"/>
+        app:trackTint="@color/switch_Track"
+        android:paddingStart="16dp"
+        />
 
     <Button
         android:id="@+id/share_button"
