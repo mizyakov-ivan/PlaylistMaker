@@ -101,14 +101,20 @@ class SearchActivity : AppCompatActivity() {
 
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                historyLayout.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
+                text = s.toString()
+                if (text.isEmpty()) {
+                    historyLayout.visibility = if (searchHistory.historyList.isNotEmpty()) View.VISIBLE else View.GONE
+                    notFound.visibility = View.GONE
+                } else {
+                    historyLayout.visibility = View.GONE
+                    notFound.visibility = View.GONE
+                }
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         })
-
 
         historyRecycler.adapter = historyAdapter
         historyRecycler.layoutManager =
@@ -182,7 +188,6 @@ class SearchActivity : AppCompatActivity() {
             apiRequest(text)
             noInternet.visibility = View.GONE
         }
-
     }
     private fun apiRequest(text: String) {
         tracksRecycler.visibility = View.INVISIBLE
@@ -191,34 +196,28 @@ class SearchActivity : AppCompatActivity() {
         historyLayout.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
 
-        iTunesService.getTrack(text)
-            .enqueue(object : Callback<ResponseTracks> {
+        iTunesService.getTrack(text).enqueue(object : Callback<ResponseTracks> {
+            override fun onResponse(call: Call<ResponseTracks>, response: Response<ResponseTracks>) {
+                val tracksFromResp = response.body()?.results
 
-                override fun onResponse(
-                    call: Call<ResponseTracks>,
-                    response: Response<ResponseTracks>
-                ) {
-                    val tracksFromResp = response.body()?.results
-
-                    if (response.isSuccessful && tracksFromResp != null) {
-                        tracks.clear()
-                        tracks.addAll(tracksFromResp.toMutableList())
-                        progressBar.visibility = View.GONE
-                        tracksRecycler.visibility = if (tracks.isEmpty()) View.INVISIBLE else View.VISIBLE
-                        notFound.visibility = if (tracks.isEmpty()) View.VISIBLE else View.INVISIBLE
-                    } else {
-                        progressBar.visibility = View.GONE
-                        noInternet.visibility = View.VISIBLE
-                    }
-                    adapter.notifyDataSetChanged()
-                }
-
-                override fun onFailure(call: Call<ResponseTracks>, t: Throwable) {
-                    progressBar.visibility = View.GONE
+                progressBar.visibility = View.GONE
+                if (response.isSuccessful && tracksFromResp != null) {
+                    tracks.clear()
+                    tracks.addAll(tracksFromResp.toMutableList())
+                    tracksRecycler.visibility = if (tracks.isEmpty()) View.INVISIBLE else View.VISIBLE
+                    notFound.visibility = if (tracks.isEmpty()) View.VISIBLE else View.INVISIBLE
+                } else {
                     noInternet.visibility = View.VISIBLE
-                    adapter.notifyDataSetChanged()
                 }
-            })
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onFailure(call: Call<ResponseTracks>, t: Throwable) {
+                progressBar.visibility = View.GONE
+                noInternet.visibility = View.VISIBLE
+                adapter.notifyDataSetChanged()
+            }
+        })
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
