@@ -17,7 +17,7 @@
             android:name=".LibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".PlayerActivity"
+            android:name=".presentation.PlayerActivity"
             android:exported="false" />
         <activity
             android:name=".SearchActivity"

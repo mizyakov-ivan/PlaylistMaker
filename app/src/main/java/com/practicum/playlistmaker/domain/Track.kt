@@ -1,7 +1,6 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.domain
 
 import android.icu.text.SimpleDateFormat
-import android.os.Parcelable
 import java.io.Serializable
 import java.util.Locale
 

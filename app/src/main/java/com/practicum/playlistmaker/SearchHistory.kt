@@ -1,7 +1,9 @@
 package com.practicum.playlistmaker
 import android.content.SharedPreferences
+import com.practicum.playlistmaker.domain.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+
 private const val HISTORY_KEY = "history"
 private const val MAX_SIZE = 10
 private const val LAST_INDEX = 9

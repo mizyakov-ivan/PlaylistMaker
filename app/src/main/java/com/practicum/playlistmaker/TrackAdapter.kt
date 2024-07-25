@@ -3,8 +3,7 @@ package com.practicum.playlistmaker
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.R
-import com.google.gson.Gson
+import com.practicum.playlistmaker.domain.Track
 
 class TrackAdapter(
     private val tracks: MutableList<Track>,
