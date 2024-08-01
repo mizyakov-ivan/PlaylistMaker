@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.data.SearchHistory
 import com.practicum.playlistmaker.search.data.TracksResponse
-import com.practicum.playlistmaker.player.domain.Track
+import com.practicum.playlistmaker.search.data.TrackDto
 import com.practicum.playlistmaker.search.ui.TrackAdapter
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.data.ITunesAPI
@@ -42,7 +42,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var refreshButton: Button
     private lateinit var tracksRecycler: RecyclerView
     private lateinit var historyLayout: LinearLayout
-    private lateinit var tracks: MutableList<Track>
+    private lateinit var tracks: MutableList<TrackDto>
     private lateinit var progressBar: ProgressBar
 
 
