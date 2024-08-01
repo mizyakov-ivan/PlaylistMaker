@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.player.ui
 
 import android.os.Bundle
 import android.os.Handler
@@ -11,10 +11,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.SearchActivity.Companion.INTENT_KEY
-import com.practicum.playlistmaker.data.TrackGetterImpl
-import com.practicum.playlistmaker.domain.MediaPlayerInteractor
-import com.practicum.playlistmaker.domain.TrackGetter
+import com.practicum.playlistmaker.player.data.TrackGetterImplementation
+import com.practicum.playlistmaker.player.domain.TrackGetter
+import com.practicum.playlistmaker.player.ui.TrackTimer
+import com.practicum.playlistmaker.search.ui.SearchActivity.Companion.INTENT_KEY
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -23,14 +23,14 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var playButton: ImageView
     private lateinit var playTime: TextView
-    private val player: MediaPlayerInteractor = MediaPlayerInteractorImplementation()
+    private val player: MediaPlayerInteractorImplementation = MediaPlayerInteractorImplementation()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        val trackGetter: TrackGetter = TrackGetterImpl()
+        val trackGetter: TrackGetter = TrackGetterImplementation()
         val track = trackGetter.getTrack(INTENT_KEY, intent)
         binding.backButton.setOnClickListener {
             finish()

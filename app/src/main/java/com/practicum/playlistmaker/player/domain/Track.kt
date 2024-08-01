@@ -1,9 +1,8 @@
-package com.practicum.playlistmaker.domain
+package com.practicum.playlistmaker.player.domain
 
 import android.icu.text.SimpleDateFormat
 import java.io.Serializable
 import java.util.Locale
-
 data class Track (
     val trackName: String,
     val artistName: String,
@@ -13,7 +12,7 @@ data class Track (
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    val previewUrl: String
+    val previewUrl: String,
 ) : Serializable {
     val artworkUrl512: String
         get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")

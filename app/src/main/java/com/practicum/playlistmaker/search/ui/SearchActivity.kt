@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.search.ui
 
 import android.content.Context
 import android.content.Intent
@@ -18,8 +18,13 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.presentation.PlayerActivity
-import com.practicum.playlistmaker.domain.Track
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.search.data.SearchHistory
+import com.practicum.playlistmaker.search.data.TracksResponse
+import com.practicum.playlistmaker.player.domain.Track
+import com.practicum.playlistmaker.search.ui.TrackAdapter
+import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.search.data.ITunesAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -196,8 +201,8 @@ class SearchActivity : AppCompatActivity() {
         historyLayout.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
 
-        iTunesService.getTrack(text).enqueue(object : Callback<ResponseTracks> {
-            override fun onResponse(call: Call<ResponseTracks>, response: Response<ResponseTracks>) {
+        iTunesService.getTrack(text).enqueue(object : Callback<TracksResponse> {
+            override fun onResponse(call: Call<TracksResponse>, response: Response<TracksResponse>) {
                 val tracksFromResp = response.body()?.results
 
                 progressBar.visibility = View.GONE
@@ -212,7 +217,7 @@ class SearchActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
 
-            override fun onFailure(call: Call<ResponseTracks>, t: Throwable) {
+            override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
                 progressBar.visibility = View.GONE
                 noInternet.visibility = View.VISIBLE
                 adapter.notifyDataSetChanged()
