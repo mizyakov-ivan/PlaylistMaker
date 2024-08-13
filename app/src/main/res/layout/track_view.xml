@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/trackView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="?attr/colorSecondary"
+    android:theme="@style/Theme.PlaylistMaker">
+
+    <ImageView
+        android:id="@+id/artwork_url_100"
+        android:layout_width="@dimen/sideImageTrack"
+        android:layout_height="@dimen/sideImageTrack"
+        android:src="@drawable/placeholder"
+        android:layout_margin="@dimen/marginImageTrack"
+        android:layout_gravity="center_vertical"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/trackName"
+            style="@style/textTrackView"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="@dimen/t_size_16"
+            tools:text="Song title"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/marginTextTrack">
+
+            <TextView
+                android:id="@+id/artistName"
+                style="@style/textTrackView"
+                tools:text="The artist of the song"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_ellipse"
+                android:layout_margin="@dimen/marginEllipseTrack"/>
+
+            <TextView
+                android:layout_weight="0"
+                android:id="@+id/trackTime"
+                style="@style/textTrackView"
+                tools:text="5:01"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        style="@style/ImageViewSettings"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/arrow_forward"/>
+</LinearLayout>
