@@ -7,7 +7,7 @@ import com.practicum.playlistmaker.media.domain.model.Track
 
 class MediaRouter(private val activity: AppCompatActivity) {
     fun backView() {
-
+        activity.finish()
     }
 
     fun getToMedia(): Track {

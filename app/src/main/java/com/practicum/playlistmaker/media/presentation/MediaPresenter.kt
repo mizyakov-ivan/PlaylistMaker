@@ -73,7 +73,7 @@ class MediaPresenter(
         return mediaInteractor.getCurrentPosition()
     }
 
-    fun clickBackButton() {
+    fun clickArrowBack() {
         mediaRouter.backView()
     }
 }

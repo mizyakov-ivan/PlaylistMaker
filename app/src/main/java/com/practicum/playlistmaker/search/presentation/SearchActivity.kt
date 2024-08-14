@@ -33,13 +33,14 @@ class SearchActivity : AppCompatActivity(), SearchViewActivity {
     lateinit var tracksHistoryAdapter: TrackHistoryAdapter
     lateinit var placeholderNothingWasFound: LinearLayout
     lateinit var placeholderCommunicationsProblem: LinearLayout
-    lateinit var buttonReturn: Button
     lateinit var historyList: LinearLayout
     lateinit var buttonClear: Button
     lateinit var sharedPref: SharedPreferences
     lateinit var progressBar: ProgressBar
     lateinit var recyclerView: RecyclerView
     lateinit var recyclerViewHistory: RecyclerView
+    lateinit var titleHistoryTextView: TextView
+
 
     private lateinit var searchPresenter: SearchPresenter
 
@@ -82,7 +83,9 @@ class SearchActivity : AppCompatActivity(), SearchViewActivity {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerViewHistory = findViewById(R.id.recyclerViewHistory)
         searchEditText.setText("")
+        titleHistoryTextView = findViewById(R.id.title_history)
     }
+
     private fun textSearch(): String {
         return searchEditText.getText().toString()
     }
@@ -201,6 +204,7 @@ class SearchActivity : AppCompatActivity(), SearchViewActivity {
         tracksHistoryAdapter.setTracks(
             searchPresenter.tracksHistoryFromJson()
         )
+        buttonClear.isVisible = historyTracks.isNotEmpty() // Скрываем кнопку, если история пустая
     }
 
     override fun clearTextSearch() {
@@ -229,13 +233,15 @@ class SearchActivity : AppCompatActivity(), SearchViewActivity {
         tracksAdapter.setTracks(tracks)
     }
 
-    //Обработка результатов запроса
+
     override fun showMessageError(networkResponse: NetworkResponse) {
+
         when (networkResponse) {
             is NetworkResponse.SuccessRequest -> {
                 placeholderNothingWasFound.isVisible = false
                 placeholderCommunicationsProblem.isVisible = false
             }
+
             is NetworkResponse.NoData -> {
                 placeholderNothingWasFound.isVisible = true
                 placeholderCommunicationsProblem.isVisible = false
@@ -245,6 +251,7 @@ class SearchActivity : AppCompatActivity(), SearchViewActivity {
                 placeholderCommunicationsProblem.isVisible = true
                 placeholderNothingWasFound.isVisible = false
             }
+
             else -> {
                 placeholderNothingWasFound.isVisible = true
                 placeholderCommunicationsProblem.isVisible = false
@@ -252,6 +259,7 @@ class SearchActivity : AppCompatActivity(), SearchViewActivity {
         }
     }
 }
+
 
 
 

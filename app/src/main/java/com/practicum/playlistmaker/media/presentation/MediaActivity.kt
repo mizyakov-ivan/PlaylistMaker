@@ -84,7 +84,7 @@ class MediaActivity : AppCompatActivity(), MediaView {
         // на главный экран через закрытие экрана "Настройки"
         buttonArrowBackSearch.setOnClickListener() {
             handler.removeCallbacksAndMessages(null)
-            mediaPresenter.clickBackButton()
+            mediaPresenter.clickArrowBack()
         }
 
         buttonPlay.setOnClickListener() {
