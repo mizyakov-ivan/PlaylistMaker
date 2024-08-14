@@ -1,4 +1,5 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.setting
+
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -9,6 +10,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.practicum.playlistmaker.App
+import com.practicum.playlistmaker.R
 
 const val THEME_KEY = "key_for_theme"
 const val THEME = "day_night_theme"
@@ -74,5 +77,4 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 }
-
 

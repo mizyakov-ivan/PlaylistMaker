@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:theme="@style/Theme.PlaylistMaker"
     android:layout_height="match_parent"
+    android:background="?attr/colorSecondary"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarSearch"
+        style="@style/panelHeaderToolbar"
+        android:background="?attr/colorSecondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/artwork_url_100"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder"
@@ -20,33 +30,22 @@
         app:layout_constraintGuide_end="@dimen/_16dp"/>
 
     <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/backButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/artwork"
-        />
-
-    <ImageView
-        android:id="@+id/artwork"
-        tools:src="@drawable/placeholder312"
+        android:id="@+id/artwork_url_100"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toEndOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/backButton"
-        app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/trackName"
         android:layout_marginHorizontal="@dimen/_8dp"
         android:layout_marginTop="26dp"
-        />
+        app:layout_constraintBottom_toTopOf="@id/trackName"
+        app:layout_constraintEnd_toStartOf="@id/rightBorder"
+        app:layout_constraintStart_toEndOf="@id/leftBorder"
+        app:layout_constraintTop_toBottomOf="@id/toolbarSearch"
+        tools:src="@drawable/placeholder312" />
 
     <TextView
         android:id="@+id/trackName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/artwork"
+        app:layout_constraintTop_toBottomOf="@id/artwork_url_100"
         app:layout_constraintStart_toEndOf="@id/leftBorder"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
         app:layout_constraintBottom_toTopOf="@id/artistName"
@@ -54,7 +53,6 @@
         tools:text="Track name"
         style="@style/color_track_name"
         android:textSize="@dimen/t_size_22"
-
         />
 
     <TextView
@@ -78,12 +76,12 @@
         app:layout_constraintTop_toBottomOf="@id/artistName"
         app:layout_constraintStart_toEndOf="@id/leftBorder"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/playTime"
+        app:layout_constraintBottom_toTopOf="@id/duration"
         android:layout_marginTop="@dimen/_38dp"
         android:visibility="visible"/>
 
     <ImageView
-        android:id="@+id/addToCollectionButton"
+        android:id="@+id/button_add_track"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/add_to_collection_button"
@@ -94,7 +92,7 @@
         />
 
     <ImageView
-        android:id="@+id/addToFavoritesButton"
+        android:id="@+id/like_track"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/add_to_favorites_button"
@@ -104,7 +102,7 @@
         android:layout_marginEnd="@dimen/_8dp"/>
 
     <TextView
-        android:id="@+id/playTime"
+        android:id="@+id/duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="0:30"

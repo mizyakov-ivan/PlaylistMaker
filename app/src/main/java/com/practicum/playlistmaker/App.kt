@@ -1,6 +1,8 @@
 package com.practicum.playlistmaker
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import com.practicum.playlistmaker.setting.THEME
+import com.practicum.playlistmaker.setting.THEME_KEY
 
 class App: Application() {
     private var darkTheme = false

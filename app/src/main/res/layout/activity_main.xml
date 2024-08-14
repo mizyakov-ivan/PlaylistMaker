@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/background_color"
     style="@style/MatchParentStyle"
     android:id="@+id/main"
+    tools:context=".main.MainActivity"
     android:orientation="vertical"
     android:padding="14dp">
 
