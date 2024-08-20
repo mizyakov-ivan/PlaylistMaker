@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.media.domain.model.Track
+import com.practicum.playlistmaker.player.domain.model.Track
 
 const val HISTORY_TRACKS_KEY = "history_tracks_key"
 class SharedPreferencesClientImpl(private val sharedPref: SharedPreferences) : SharedPreferencesClient {

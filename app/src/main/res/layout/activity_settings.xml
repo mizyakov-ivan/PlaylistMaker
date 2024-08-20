@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:theme="@style/Theme.PlaylistMaker"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="14dp"
+    tools:context=".main.ui.activity.MainActivity"
+    android:background="?attr/colorSecondary">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarSetting"
+        app:title="@string/settings"
+        style="@style/panelHeaderToolbar"/>
+
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginVertical="16dp"
+        android:saveEnabled="false"
+        android:text="@string/black_theme"
+        android:textSize="@dimen/t_size_16"
+        app:thumbTint="@color/switch_Thumb"
+        app:trackTint="@color/switch_Track"
+        android:paddingStart="16dp"
+        />
+
+    <Button
+        android:id="@+id/share_button"
+        style="@style/setting_button"
+        android:drawableEnd="@drawable/share"
+        android:text="@string/app_share"
+        />
+
+    <Button
+        android:id="@+id/help_button"
+        style="@style/setting_button"
+        android:drawableEnd="@drawable/support"
+        android:text="@string/help" />
+
+    <Button
+        android:id="@+id/user_agreement"
+        style="@style/setting_button"
+        android:drawableEnd="@drawable/arrow_forward"
+        android:text="@string/user_agreements" />
+
+</LinearLayout>
+

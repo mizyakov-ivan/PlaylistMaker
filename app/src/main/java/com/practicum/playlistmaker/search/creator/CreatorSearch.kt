@@ -1,8 +1,7 @@
 package com.practicum.playlistmaker.search.creator
 
-
+import android.content.Context
 import android.content.SharedPreferences
-
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.search.data.network.NetworkClient
 import com.practicum.playlistmaker.search.data.network.NetworkClientImpl
@@ -11,32 +10,34 @@ import com.practicum.playlistmaker.search.data.sharedpreferences.SharedPreferenc
 import com.practicum.playlistmaker.search.data.sharedpreferences.SharedPreferencesClientImpl
 import com.practicum.playlistmaker.search.domain.api.SearchInteractor
 import com.practicum.playlistmaker.search.domain.impl.SearchInteractorImpl
-import com.practicum.playlistmaker.search.presentation.SearchPresenter
-import com.practicum.playlistmaker.search.presentation.SearchRouter
-import com.practicum.playlistmaker.search.presentation.SearchViewActivity
+import com.practicum.playlistmaker.search.ui.activity.HISTORY_TRACKS_SHARED_PREF
+import com.practicum.playlistmaker.search.ui.router.SearchNavigationRouter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object CreatorSearch {
-    fun provideSearchPresenter(
-        viewSearch: SearchViewActivity,
-        view: AppCompatActivity,
-        sharedPreferences: SharedPreferences
-    ): SearchPresenter {
-        return SearchPresenter(
-            view = viewSearch,
-            searchInteractor = getSearchInteractor(sharedPreferences),
-            searchRouter = getSearchRouter(view)
+    private fun getsharedPref(context: Context): SharedPreferences {
+        return context.getSharedPreferences(
+            HISTORY_TRACKS_SHARED_PREF,
+            AppCompatActivity.MODE_PRIVATE
         )
     }
 
-    private fun getSharedPreferences(sharedPreferences: SharedPreferences): SharedPreferencesClient{
-        return SharedPreferencesClientImpl(sharedPref = sharedPreferences)
+    private fun getSharedPreferencesClient(context: Context): SharedPreferencesClient {
+        return SharedPreferencesClientImpl(getsharedPref(context))
     }
 
-    private fun getSearchInteractor(sharedPreferences: SharedPreferences): SearchInteractor{
-        return SearchInteractorImpl(getSharedPreferences(sharedPreferences = sharedPreferences), getNetworkClient())
+    fun getNetworkClient(): NetworkClient {
+        return NetworkClientImpl(getRetrofit().create(iTunesSearchAPI::class.java))
     }
+
+    fun provideSearchInteractor(context: Context): SearchInteractor {
+        return SearchInteractorImpl(
+            getSharedPreferencesClient(context),
+            getNetworkClient(),
+        )
+    }
+
 
     //Базовый URL iTunes Search API
     private val baseURLiTunesSearchAPI = "https://itunes.apple.com"
@@ -47,12 +48,8 @@ object CreatorSearch {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
-    fun getNetworkClient(): NetworkClient{
-        return NetworkClientImpl(getRetrofit().create(iTunesSearchAPI::class.java))
+    fun getSearchNavigationRouter(activity: AppCompatActivity): SearchNavigationRouter {
+        return SearchNavigationRouter(activity)
     }
 
-    fun getSearchRouter(view: AppCompatActivity): SearchRouter{
-        return SearchRouter(view)
-    }
 }
