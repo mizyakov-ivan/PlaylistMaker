@@ -5,9 +5,10 @@ import com.practicum.playlistmaker.player.domain.api.PlayerStateListener
 import com.practicum.playlistmaker.player.domain.api.TrackPlayer
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 
-class TrackPlayerImpl() : TrackPlayer {
+class TrackPlayerImpl(
+    private val mediaPlayer: MediaPlayer
+) : TrackPlayer {
 
-    private var mediaPlayer = MediaPlayer()
     override var listener: PlayerStateListener? = null
 
     init {
