@@ -29,5 +29,6 @@
     <string name="track_genre">Жанр</string>
     <string name="track_country">Страна</string>
     <string name="title_history">Вы искали</string>
+    <string name="duration_start">00:00</string>
 
 </resources>
