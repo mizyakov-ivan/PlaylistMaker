@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.TimeUtils.formatTrackDuraction
-import com.practicum.playlistmaker.player.creator.CreatorPlayer
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.models.PlayerStateInterface
 import com.practicum.playlistmaker.player.ui.router.PlayerRouter
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 class PlayerActivity : AppCompatActivity() {
 
     //Переменные
@@ -30,23 +30,18 @@ class PlayerActivity : AppCompatActivity() {
     lateinit var duration: TextView
     lateinit var buttonPlay: ImageView
 
-    var previewUrl: String? = null
+    private var previewUrl: String? = null
 
-    private lateinit var playerViewModel: PlayerViewModel
+    private val playerViewModel: PlayerViewModel by viewModel()
     private lateinit var playerRouter: PlayerRouter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media)
 
-        //Присвоить значение переменным
         initViews()
 
-        playerRouter = CreatorPlayer.getMediaRouter(this)
-        playerViewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory(playerRouter.getToMedia().previewUrl)
-        )[PlayerViewModel::class.java]
+        playerRouter = PlayerRouter(this)
 
         playerViewModel.observePlayerState().observe(this){
             render(it)
@@ -56,22 +51,18 @@ class PlayerActivity : AppCompatActivity() {
             duration.text = time
         }
 
-        //Listener
         setListeners()
-        //Отображение данных трека
+
         getInfoTrack()
-        //Подготовка воспроизведения
-        startPreparePlayer()
+
     }
     override fun onPause() {
         super.onPause()
-       // handler.removeCallbacksAndMessages(null)
         playerViewModel.activityPause()
 
     }
     override fun onDestroy() {
         super.onDestroy()
-        duration.text = "00:00"
     }
 
     fun getInfoTrack() {
@@ -88,6 +79,9 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun prepare(){
         buttonPlay.isEnabled = true
+        buttonPlay.setImageResource(R.drawable.play_button)
+        duration.text = getString(R.string.duration_start)
+
     }
 
     private fun play(){
@@ -133,8 +127,7 @@ class PlayerActivity : AppCompatActivity() {
         releaseDate.text = track.releaseDate.substring(0..3)
         primaryGenreName.text = track.primaryGenreName
         country.text = track.country
-        duration.text = "00:00"
-
+        duration.text = getString(R.string.duration_start)
         val roundingRadius = this.resources.getDimensionPixelSize(R.dimen.s_padding)
         Glide.with(this)
             .load(track.getCoverArtwork())
@@ -142,9 +135,11 @@ class PlayerActivity : AppCompatActivity() {
             .centerCrop()
             .transform(RoundedCorners(roundingRadius))
             .into(artworkUrl100)
+
+        startPreparePlayer(previewUrl)
     }
-    private fun startPreparePlayer() {
-        playerViewModel.startPreparePlayer()
+    private fun startPreparePlayer(previewUrl: String?) {
+        playerViewModel.startPreparePlayer(previewUrl)
     }
 }
 
