@@ -7,8 +7,8 @@ import com.practicum.playlistmaker.settings.data.impl.SettingsRepositoryImpl
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<TrackPlayer> {
-        TrackPlayerImpl(mediaPlayer = get())
+    factory <TrackPlayer> {
+        TrackPlayerImpl()
     }
 
     single<SettingsRepository> {
