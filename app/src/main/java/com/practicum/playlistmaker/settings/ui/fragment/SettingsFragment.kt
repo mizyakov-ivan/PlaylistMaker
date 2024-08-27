@@ -1,16 +1,19 @@
-package com.practicum.playlistmaker.settings.ui.activity
+package com.practicum.playlistmaker.settings.ui.fragment
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
 import com.practicum.playlistmaker.settings.ui.view_model.SettingsViewModel
 import com.practicum.playlistmaker.settings.ui.router.SettingsNavigationRouter
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
-class SettingsActivity : AppCompatActivity() {
-
+class SettingsFragment: Fragment() {
     private lateinit var buttonShare: Button
     private lateinit var buttonSupport: Button
     private lateinit var buttonUserAgreement: Button
@@ -18,28 +21,38 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var buttonArrowBackSettings: androidx.appcompat.widget.Toolbar
 
     private val viewModelSettings: SettingsViewModel by viewModel()
-    private val settingsNavigationRouter = SettingsNavigationRouter(this)
+    private lateinit var binding: FragmentSettingsBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initViews()
 
         setListeners()
 
         //Отображение актуального состояния переключателя
-        viewModelSettings.observeThemeSwitcherChecked().observe(this) { isChecked ->
+        viewModelSettings.observeThemeSwitcherChecked().observe(viewLifecycleOwner) { isChecked ->
             themeSwitcher.isChecked = isChecked
         }
     }
 
+
     private fun initViews() {
-        buttonArrowBackSettings = findViewById(R.id.toolbarSetting)
-        themeSwitcher = findViewById(R.id.switchTheme)
-        buttonShare = findViewById(R.id.share_button)
-        buttonSupport = findViewById(R.id.help_button)
-        buttonUserAgreement = findViewById(R.id.user_agreement)
+        buttonArrowBackSettings = binding.toolbarSetting
+        themeSwitcher = binding.switchTheme
+        buttonShare = binding.shareButton
+        buttonSupport = binding.helpButton
+        buttonUserAgreement = binding.userAgreement
     }
 
     private fun setListeners() {
@@ -66,9 +79,8 @@ class SettingsActivity : AppCompatActivity() {
 
         //Обработка нажатия на ToolBar "<-" и переход
         // на главный экран через закрытие экрана "Настройки"
-        buttonArrowBackSettings.setOnClickListener() {
-            settingsNavigationRouter.backView()
-        }
+        //buttonArrowBackSettings.setOnClickListener() {
+        //    settingsNavigationRouter.backView()
+        //}
     }
 }
-

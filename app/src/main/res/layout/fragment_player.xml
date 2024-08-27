@@ -4,17 +4,18 @@
     android:theme="@style/Theme.PlaylistMaker"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
-    tools:context=".player.ui.activity.PlayerActivity"
+    tools:context="com.practicum.playlistmaker.player.ui.fragment.PlayerFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarSearch"
+        android:id="@+id/toolbarSetting"
         style="@style/panelHeaderToolbar"
         android:background="?attr/colorSecondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/artwork_url_100"/>
+        app:layout_constraintBottom_toTopOf="@id/artwork_url_100"
+        app:navigationIcon="@drawable/arrow_back"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder"
@@ -39,7 +40,7 @@
         app:layout_constraintBottom_toTopOf="@id/trackName"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
         app:layout_constraintStart_toEndOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/toolbarSearch"
+        app:layout_constraintTop_toBottomOf="@id/toolbarSetting"
         tools:src="@drawable/placeholder312" />
 
     <TextView

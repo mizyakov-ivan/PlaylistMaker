@@ -39,5 +39,7 @@
     <dimen name="marginEllipseTrack">5dp</dimen>
     <dimen name="marginImageTrack">8dp</dimen>
     <dimen name="marginTextTrack">1dp</dimen>
-
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_button">24dp</dimen>
+    <dimen name="padding_4_for_settings">4dp</dimen>
 </resources>
