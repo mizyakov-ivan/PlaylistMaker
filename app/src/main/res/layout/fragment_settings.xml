@@ -7,8 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="14dp"
-    tools:context=".main.ui.activity.MainActivity"
+    tools:context="com.practicum.playlistmaker.settings.ui.fragment.SettingsFragment"
     android:background="?attr/colorSecondary">
 
     <androidx.appcompat.widget.Toolbar

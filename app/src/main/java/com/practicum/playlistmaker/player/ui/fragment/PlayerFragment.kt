@@ -1,22 +1,30 @@
-package com.practicum.playlistmaker.player.ui.activity
+package com.practicum.playlistmaker.player.ui.fragment
 
+import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.TimeUtils.formatTrackDuraction
+import com.practicum.playlistmaker.TimeUtils
+import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.models.PlayerStateInterface
-import com.practicum.playlistmaker.player.ui.router.PlayerRouter
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerFragment : Fragment() {
 
-    //Переменные
+//Переменные
     lateinit var buttonArrowBackSearch: androidx.appcompat.widget.Toolbar
     lateinit var track: Track
     lateinit var artworkUrl100: ImageView
@@ -30,30 +38,51 @@ class PlayerActivity : AppCompatActivity() {
     lateinit var duration: TextView
     lateinit var buttonPlay: ImageView
 
+    companion object {
+        private const val SEND_TRACK_ID = "send_track_id"
+        fun createArgs(sendTrackId: Int): Bundle {
+            return bundleOf(SEND_TRACK_ID to sendTrackId)
+        }
+    }
+
     private var previewUrl: String? = null
 
-    private val playerViewModel: PlayerViewModel by viewModel()
-    private lateinit var playerRouter: PlayerRouter
+    private val playerViewModel: PlayerViewModel by viewModel {
+    parametersOf(requireArguments().getInt(SEND_TRACK_ID))
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_media)
+    private lateinit var binding: FragmentPlayerBinding
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
+        binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
 
         initViews()
 
-        playerRouter = PlayerRouter(this)
+        playerViewModel.getTrackHistory()
 
-        playerViewModel.observePlayerState().observe(this){
+        playerViewModel.observeTrackHistoryState().observe(viewLifecycleOwner) { trackHistory ->
+            getInfoTrack(trackHistory)
+        }
+
+        playerViewModel.observePlayerState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        playerViewModel.observerTimerState().observe(this){ time ->
+        playerViewModel.observerTimerState().observe(viewLifecycleOwner) { time ->
             duration.text = time
         }
 
         setListeners()
-
-        getInfoTrack()
 
     }
     override fun onPause() {
@@ -65,12 +94,12 @@ class PlayerActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    fun getInfoTrack() {
-        showDataTrack(playerRouter.getToMedia())
+    fun getInfoTrack(track: Track) {
+    showDataTrack(track)
     }
 
-    private fun render(state: PlayerStateInterface){
-        when(state){
+    private fun render(state: PlayerStateInterface) {
+    when (state) {
             is PlayerStateInterface.Play -> play()
             is PlayerStateInterface.Pause -> pause()
             is PlayerStateInterface.Prepare -> prepare()
@@ -93,24 +122,24 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        buttonArrowBackSearch = findViewById(R.id.toolbarSearch)
-        artworkUrl100 = findViewById(R.id.artwork_url_100)
-        trackName = findViewById(R.id.trackName)
-        artistName = findViewById(R.id.artistName)
-        trackTime = findViewById(R.id.lengthD)
-        collectionName = findViewById(R.id.collectionNameV)
-        releaseDate = findViewById(R.id.yearV)
-        primaryGenreName = findViewById(R.id.genreV)
-        country = findViewById(R.id.countryV)
-        duration = findViewById(R.id.duration)
-        buttonPlay = findViewById(R.id.playButton)
+        buttonArrowBackSearch = binding.toolbarSetting
+        artworkUrl100 = binding.artworkUrl100
+        trackName = binding.trackName
+        artistName = binding.artistName
+        trackTime = binding.lengthD
+        collectionName = binding.collectionNameV
+        releaseDate = binding.yearV
+        primaryGenreName = binding.genreV
+        country = binding.countryV
+        duration = binding.duration
+        buttonPlay = binding.playButton
     }
     //Настроить Listeners
     private fun setListeners() {
         //Обработка нажатия на ToolBar "<-" и переход
         // на главный экран через закрытие экрана "Настройки"
         buttonArrowBackSearch.setOnClickListener() {
-            playerRouter.backView()
+            findNavController().navigateUp()
         }
 
         buttonPlay.setOnClickListener() {
@@ -122,7 +151,7 @@ class PlayerActivity : AppCompatActivity() {
         previewUrl = track.previewUrl
         trackName.text = track.trackName
         artistName.text = track.artistName
-        trackTime.text = formatTrackDuraction(track.trackTimeMillis.toInt())
+        trackTime.text = TimeUtils.formatTrackDuraction(track.trackTimeMillis.toInt())
         collectionName.text = track.collectionName
         releaseDate.text = track.releaseDate.substring(0..3)
         primaryGenreName.text = track.primaryGenreName
