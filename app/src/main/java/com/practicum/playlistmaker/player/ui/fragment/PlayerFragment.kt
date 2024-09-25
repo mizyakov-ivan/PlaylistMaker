@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.TimeUtils
+import com.practicum.playlistmaker.util.TimeUtils
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.models.PlayerStateInterface
