@@ -30,8 +30,7 @@ class PlayerViewModel(
     }
 
     companion object {
-        private val SEARCH_REQUEST_TOKEN = Any()
-        private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 300L
     }
 
     private var timerJob: Job? = null
@@ -51,7 +50,6 @@ class PlayerViewModel(
     }
 
     fun playbackControl() {
-
         when (playerState) {
             PlayerState.STATE_PLAYING -> {
                 playerInteractor.pausePlayer()
@@ -66,6 +64,8 @@ class PlayerViewModel(
     }
 
     fun activityPause() {
+        if (playerState == PlayerState.STATE_PREPARED) return
+        playerState = PlayerState.STATE_PAUSED
         playerInteractor.pausePlayer()
     }
 
@@ -96,6 +96,7 @@ class PlayerViewModel(
     private fun preparePlayer() {
         playerState = PlayerState.STATE_PREPARED
         playerStateLiveData.postValue(PlayerStateInterface.Prepare)
+        timerJob?.cancel()
     }
 
     private fun onScreenDestroyed() {
