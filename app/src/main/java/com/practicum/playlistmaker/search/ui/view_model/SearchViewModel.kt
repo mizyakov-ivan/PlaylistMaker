@@ -22,7 +22,7 @@ class SearchViewModel(private val searchInteractor: SearchInteractor): ViewModel
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
     }
-
+    private var searchResults: List<Track>? = null
     private lateinit var searchDebounce: (String) -> Unit
     private val handler = Handler(Looper.getMainLooper())
     private var latestSearchText: String? = null
@@ -82,11 +82,10 @@ class SearchViewModel(private val searchInteractor: SearchInteractor): ViewModel
                 .loadTracks(searchText)
                 .collect { result: ResultLoadTracks ->
                     when (result) {
-                        is ResultLoadTracks.OnSuccess -> renderState(
-                            SearchStateInterface.SearchTracks(
-                                result.data!!
-                            )
-                        )
+                        is ResultLoadTracks.OnSuccess -> {
+                            searchResults = result.data!!
+                            renderState(SearchStateInterface.SearchTracks(result.data!!))
+                        }
 
                         is ResultLoadTracks.NoData -> renderState(
                             SearchStateInterface.Error(
@@ -111,8 +110,12 @@ class SearchViewModel(private val searchInteractor: SearchInteractor): ViewModel
     }
 
     fun visibleHistoryTrack() {
-        val historyTracks = tracksHistoryFromJson()
-        renderState(SearchStateInterface.HistoryTracks(historyTracks))
+        if (searchResults != null && searchResults!!.isNotEmpty()) {
+            renderState(SearchStateInterface.SearchTracks(searchResults!!))
+        } else {
+            val historyTracks = tracksHistoryFromJson()
+            renderState(SearchStateInterface.HistoryTracks(historyTracks))
+        }
     }
 
     fun clickButtonClearHistory() {
