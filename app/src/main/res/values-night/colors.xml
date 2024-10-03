@@ -11,4 +11,5 @@
     <color name="switch_Thumb">#3772E7</color>
     <color name="switch_Track">#9FBBF3</color>
     <color name="toolbarTextColor">#000000</color>
+    <color name="line">#E6E8EB</color>
 </resources>

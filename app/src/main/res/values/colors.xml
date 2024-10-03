@@ -17,4 +17,5 @@
     <color name="toolbarTextColor">#000000</color>
     <color name="black_blue">#1A1B22</color>
     <color name="dark_gray">#4d4d4d</color>
+    <color name="line">#E6E8EB</color>
 </resources>

@@ -1,14 +1,17 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
-import android.os.Handler
-import android.os.Looper
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.models.PlayerStateInterface
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
@@ -27,11 +30,10 @@ class PlayerViewModel(
     }
 
     companion object {
-        private val SEARCH_REQUEST_TOKEN = Any()
-        private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 300L
     }
 
-    private val handler = Handler(Looper.getMainLooper())
+    private var timerJob: Job? = null
     var playerState = PlayerState.STATE_DEFAULT
 
     private val playerStateLiveData = MutableLiveData<PlayerStateInterface>()
@@ -45,14 +47,11 @@ class PlayerViewModel(
         pausePlayer()
         onViewDestroyed()
         onScreenDestroyed()
-        handler.removeCallbacksAndMessages(null)
     }
 
     fun playbackControl() {
-
         when (playerState) {
             PlayerState.STATE_PLAYING -> {
-                handler.removeCallbacksAndMessages(null)
                 playerInteractor.pausePlayer()
             }
 
@@ -65,28 +64,21 @@ class PlayerViewModel(
     }
 
     fun activityPause() {
+        if (playerState == PlayerState.STATE_PREPARED) return
+        playerState = PlayerState.STATE_PAUSED
         playerInteractor.pausePlayer()
     }
 
     private fun startPlayer() {
         playerState = PlayerState.STATE_PLAYING
         playerStateLiveData.postValue(PlayerStateInterface.Play)
-        handler.removeCallbacksAndMessages(null)
-        handler.postDelayed(
-            object : Runnable {
-                override fun run() {
-                    timerLiveData.value = getCurrentPosition()
-                    handler.postDelayed(this, SEARCH_DEBOUNCE_DELAY_MILLIS)
-                }
-            },
-            SEARCH_REQUEST_TOKEN, SEARCH_DEBOUNCE_DELAY_MILLIS
-        )
+        startTimer()
     }
 
     private fun pausePlayer() {
         playerState = PlayerState.STATE_PAUSED
-        handler.removeCallbacksAndMessages(null)
         playerStateLiveData.postValue(PlayerStateInterface.Pause)
+        timerJob?.cancel()
     }
 
 
@@ -97,14 +89,14 @@ class PlayerViewModel(
     }
 
     private fun defaultPlayer() {
-        handler.removeCallbacksAndMessages(null)
+        pausePlayer()
         playerState = PlayerState.STATE_DEFAULT
     }
 
     private fun preparePlayer() {
         playerState = PlayerState.STATE_PREPARED
         playerStateLiveData.postValue(PlayerStateInterface.Prepare)
-        handler.removeCallbacksAndMessages(null)
+        timerJob?.cancel()
     }
 
     private fun onScreenDestroyed() {
@@ -126,5 +118,14 @@ class PlayerViewModel(
 
     private fun trackState(track: Track) {
         trackHistoryStateLiveData.postValue(track)
+    }
+
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (playerState == PlayerState.STATE_PLAYING) {
+                delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
+                timerLiveData.value = getCurrentPosition()
+            }
+        }
     }
 }
