@@ -224,11 +224,11 @@ class SearchFragment : Fragment() {
     }
 
     private fun showLoad() {
-        progressBar.visibility = View.VISIBLE
+        progressBar.isVisible = true
     }
 
     private fun hideLoad() {
-        progressBar.visibility = View.GONE
+        progressBar.isVisible = false
     }
 
     private fun hideKeyboard() {

@@ -45,10 +45,22 @@ class PlayerViewModel(
     private val timerLiveData = MutableLiveData<String>()
     private val trackStateLiveData = MutableLiveData<Track>()
     private val isFavoriteStateLiveData = MutableLiveData<LikeStateInterface>()
-    fun observeTrackState(): LiveData<Track> = trackStateLiveData
-    fun observeIsFavoriteState(): LiveData<LikeStateInterface> = isFavoriteStateLiveData
-    fun observePlayerState(): LiveData<PlayerStateInterface> = playerStateLiveData
-    fun observerTimerState(): LiveData<String> = timerLiveData
+
+    fun observeTrackState(): LiveData<Track> {
+        return trackStateLiveData
+    }
+
+    fun observeIsFavoriteState(): LiveData<LikeStateInterface> {
+        return isFavoriteStateLiveData
+    }
+
+    fun observePlayerState(): LiveData<PlayerStateInterface> {
+        return playerStateLiveData
+    }
+
+    fun observerTimerState(): LiveData<String> {
+        return timerLiveData
+    }
 
     override fun onCleared() {
         pausePlayer()

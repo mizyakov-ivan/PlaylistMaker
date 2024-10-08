@@ -40,7 +40,7 @@ class TrackDbConverter {
 
     @SuppressLint("SimpleDateFormat")
     private fun getCurrentDate(): String {
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        return sdf.format(Date())
+        val dateFormat = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        return dateFormat.format(Date())
     }
 }

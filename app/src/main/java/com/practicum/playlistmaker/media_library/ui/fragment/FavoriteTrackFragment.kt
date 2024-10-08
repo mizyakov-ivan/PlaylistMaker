@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -70,21 +71,22 @@ class FavoriteTrackFragment : Fragment() {
 
     private fun render(state: FavoriteStateInterface){
         when (state){
-            is FavoriteStateInterface.FavoriteTracksIsEmpty -> ShowPlaceHolder()
-            is FavoriteStateInterface.FavoriteTracks -> ShowFavoriteTracks(state.favoriteTracks)
+            is FavoriteStateInterface.FavoriteTracksIsEmpty -> showPlaceHolder()
+            is FavoriteStateInterface.FavoriteTracks -> showFavoriteTracks(state.favoriteTracks)
         }
     }
 
-    private fun ShowPlaceHolder(){
-        placeholderNothingWasFound.visibility = View.VISIBLE
+    private fun showPlaceHolder(){
+        placeholderNothingWasFound.isVisible = true
         favoriteTracksAdapter.setTracks(null)
-        favoriteList.visibility = View.GONE
+        favoriteList.isVisible = false
     }
 
-    private fun ShowFavoriteTracks(tracks: List<Track>){
+
+    private fun showFavoriteTracks(tracks: List<Track>){
         favoriteTracksAdapter.setTracks(tracks)
-        placeholderNothingWasFound.visibility = View.GONE
-        favoriteList.visibility = View.VISIBLE
+        placeholderNothingWasFound.isVisible = false
+        favoriteList.isVisible = true
     }
 
     private fun initAdapter() {
