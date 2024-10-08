@@ -248,6 +248,7 @@ class SearchFragment : Fragment() {
 
     private fun clearTextSearch() {
         searchEditText.setText("")
+        searchViewModel.clearLatestTextSearch()
     }
 
     //Отображение истории поиска
