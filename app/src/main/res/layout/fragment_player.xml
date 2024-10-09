@@ -101,8 +101,8 @@
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
         app:layout_constraintTop_toTopOf="@id/playButton"
         app:layout_constraintBottom_toBottomOf="@id/playButton"
-        android:layout_marginEnd="@dimen/_8dp"/>
-
+        android:layout_marginEnd="@dimen/_8dp"
+        android:src="@drawable/ic_button_like_off"/>
     <TextView
         android:id="@+id/duration"
         android:layout_width="wrap_content"

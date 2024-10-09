@@ -9,7 +9,7 @@ const val HISTORY_TRACKS_KEY = "history_tracks_key"
 
 class SharedPreferencesPlayerClientImpl(
     private val sharedPref: SharedPreferences,
-    private val gson: Gson) :
+    private val gson: Gson,) :
     SharedPreferencesPlayerClient {
 
     private val typeTokenArrayList = object : TypeToken<ArrayList<Track>>() {}.type

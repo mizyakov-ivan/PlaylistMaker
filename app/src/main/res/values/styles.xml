@@ -108,6 +108,14 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="searchPlaceholder">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">86dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
     <style name="backButton">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
