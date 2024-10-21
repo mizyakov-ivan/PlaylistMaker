@@ -79,6 +79,13 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val bottomSheet = view.findViewById<LinearLayout>(R.id.bottom_sheet)
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels
+
+        bottomSheetBehavior.peekHeight = (screenHeight * 2 / 3)
 
         initViews()
 
