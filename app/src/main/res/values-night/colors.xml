@@ -12,4 +12,9 @@
     <color name="switch_Track">#9FBBF3</color>
     <color name="toolbarTextColor">#000000</color>
     <color name="line">#E6E8EB</color>
+    <color name="snackbar">#FFFFFFFF</color>
+    <color name="snackbar_text">#FF000000</color>
+    <color name="box_stroke">#FFFFFFFF</color>
+    <color name="blue">#3772E7</color>
+    <color name="box_text">#FFFFFFFF</color>
 </resources>

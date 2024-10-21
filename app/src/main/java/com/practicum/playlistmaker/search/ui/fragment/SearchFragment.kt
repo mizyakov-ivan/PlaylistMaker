@@ -42,6 +42,7 @@ class SearchFragment : Fragment() {
     lateinit var placeholderCommunicationsProblem: LinearLayout
     lateinit var historyList: LinearLayout
     lateinit var buttonClear: Button
+    lateinit var buttonRefresh: Button
     lateinit var sharedPref: SharedPreferences
     lateinit var progressBar: ProgressBar
     lateinit var recyclerView: RecyclerView
@@ -88,6 +89,7 @@ class SearchFragment : Fragment() {
         buttonClear = binding.clearHistory
         progressBar = binding.progressBar
         recyclerView = binding.recyclerView
+        buttonRefresh = binding.refreshButton
         recyclerViewHistory = binding.recyclerViewHistory
         searchEditText.setText("")
         titleHistoryTextView = binding.titleHistory
@@ -110,6 +112,11 @@ class SearchFragment : Fragment() {
         buttonClear.setOnClickListener() {
             searchViewModel.clickButtonClearHistory()
         }
+
+        buttonRefresh.setOnClickListener() {
+            searchTracks()
+        }
+
         //Поиск трека
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE && !textSearch().equals("")) {

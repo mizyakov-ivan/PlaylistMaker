@@ -6,11 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.db.domain.api.FavoriteTrackInteractor
+import com.practicum.playlistmaker.db.domain.api.PlaylistInteractor
+import com.practicum.playlistmaker.media_library.ui.models.PlaylistStateInterface
+import com.practicum.playlistmaker.new_playlist.domain.model.Playlist
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.models.LikeStateInterface
 import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.models.PlayerStateInterface
+import com.practicum.playlistmaker.player.ui.models.TrackInPlaylistStateInterface
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -19,7 +23,8 @@ class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
     private val trackId: Int,
     private val favoriteTrackInteractor: FavoriteTrackInteractor,
-) : ViewModel() {
+    private val playlistInteractor: PlaylistInteractor,
+    ) : ViewModel() {
 
     init {
         playerInteractor.subscribeOnPlayer { state: PlayerState ->
@@ -45,6 +50,8 @@ class PlayerViewModel(
     private val timerLiveData = MutableLiveData<String>()
     private val trackStateLiveData = MutableLiveData<Track>()
     private val isFavoriteStateLiveData = MutableLiveData<LikeStateInterface>()
+    private val playlistStateLiveData = MutableLiveData<PlaylistStateInterface>()
+    private val trackInPlaylistState = MutableLiveData<TrackInPlaylistStateInterface?>()
 
     fun observeTrackState(): LiveData<Track> {
         return trackStateLiveData
@@ -61,6 +68,10 @@ class PlayerViewModel(
     fun observerTimerState(): LiveData<String> {
         return timerLiveData
     }
+
+    fun observePlaylistState(): LiveData<PlaylistStateInterface> = playlistStateLiveData
+    fun observeTrackInPlaylistState(): LiveData<TrackInPlaylistStateInterface?> =
+        trackInPlaylistState
 
     override fun onCleared() {
         pausePlayer()
@@ -189,5 +200,32 @@ class PlayerViewModel(
                 trackState(track)
             }
         }
+    }
+    fun showPlaylist() {
+        viewModelScope.launch {
+            playlistInteractor.getPlaylists().collect() { playlists ->
+                if (playlists.isEmpty()) playlistStateLiveData.postValue(PlaylistStateInterface.PlaylistsIsEmpty)
+                else playlistStateLiveData.postValue(PlaylistStateInterface.Playlists(playlists))
+            }
+        }
+    }
+
+    fun onPlaylistClick(tracksId: List<Int>, playlist: Playlist) {
+        if (sendTrack!!.trackId in tracksId) {
+            trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackOnPlaylist(playlist.playListName))
+        } else {
+            viewModelScope.launch {
+                playlistInteractor.insertTrackInPlaylist(
+                    sendTrack!!,
+                    playlist,
+                    tracksId
+                )
+            }
+            trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackAddToPlaylist(playlist.playListName))
+        }
+    }
+
+    fun eraseState() {
+        trackInPlaylistState.postValue(null)
     }
 }
