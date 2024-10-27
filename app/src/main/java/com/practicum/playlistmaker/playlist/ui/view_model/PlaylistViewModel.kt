@@ -57,6 +57,7 @@ class PlaylistViewModel(
             playlistInteractor.getTrackInPlaylist(playlist.tracksList!!).collect() {
                 trackInPlaylist = it
                 tracksInPlaylistStateLiveData.postValue(it)
+                tracksInPlaylistStateLiveData.postValue(it.reversed())
                 getTrackTime(it)
                 getQuantityTrack(playlist.quantityTracks)
             }

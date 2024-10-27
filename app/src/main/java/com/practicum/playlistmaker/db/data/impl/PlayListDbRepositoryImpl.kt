@@ -78,9 +78,11 @@ class PlayListDbRepositoryImpl(
 
     override suspend fun getAllTrackInPlaylists(): Flow<List<Track>> = flow {
         val allTrackInPlaylist =
-            appDataBase.trackInPlaylistDao().getAllTrackInPlaylists().map { trackInPlaylistEntity ->
-                playlistDbConverter.map(trackInPlaylistEntity)
-            }
+            appDataBase.trackInPlaylistDao().getAllTrackInPlaylists()
+                .sortedWith(compareBy(TrackInPlaylistEntity::currentDate))
+                .map { trackInPlaylistEntity ->
+                    playlistDbConverter.map(trackInPlaylistEntity)
+                }
 
         emit(allTrackInPlaylist)
     }

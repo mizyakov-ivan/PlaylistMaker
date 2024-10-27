@@ -90,7 +90,7 @@ class FavoriteTrackFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        favoriteTracksAdapter = TrackAdapter(ArrayList<Track>())
+        favoriteTracksAdapter = TrackAdapter(ArrayList<Track>(), TrackAdapter.HIGH_RESOLUTION)
         recyclerView.adapter = favoriteTracksAdapter
     }
 

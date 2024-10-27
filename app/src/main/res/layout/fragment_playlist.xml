@@ -178,7 +178,7 @@
                     android:id="@+id/playlist_empty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/snackbar"
                     android:textSize="@dimen/t_size_18"
                     android:fontFamily="@font/ys_display_regular"
                     android:text="@string/empty_playlist"

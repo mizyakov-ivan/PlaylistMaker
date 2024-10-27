@@ -100,9 +100,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        tracksAdapter = TrackAdapter(ArrayList<Track>())
+        tracksAdapter = TrackAdapter(ArrayList<Track>(), TrackAdapter.HIGH_RESOLUTION)
         recyclerView.adapter = tracksAdapter
-        tracksHistoryAdapter = TrackHistoryAdapter(ArrayList<Track>())
+        tracksHistoryAdapter = TrackHistoryAdapter(ArrayList<Track>(), TrackAdapter.HIGH_RESOLUTION)
         recyclerViewHistory.adapter = tracksHistoryAdapter
     }
 

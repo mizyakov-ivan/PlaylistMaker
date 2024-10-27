@@ -38,7 +38,8 @@ class PlaylistFragment : Fragment() {
     private lateinit var share: ImageView
     private lateinit var more: ImageView
     private lateinit var recyclerViewBottomSheet: RecyclerView
-    private lateinit var confirmDialog: MaterialAlertDialogBuilder
+    private lateinit var confirmDialogDeleteTrack: MaterialAlertDialogBuilder
+    private lateinit var confirmDialogDeletePlaylist: MaterialAlertDialogBuilder
     private lateinit var buttonArrowBack: androidx.appcompat.widget.Toolbar
     private lateinit var playlistIsEmpty: TextView
     private lateinit var bottomSheetBehaviorMore: BottomSheetBehavior<LinearLayout>
@@ -93,6 +94,16 @@ class PlaylistFragment : Fragment() {
         viewModel.getPlaylist()
     }
 
+    override fun onPause() {
+        super.onPause()
+        bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
     private fun setObserve() {
         viewModel.observeStatePlaylist().observe(viewLifecycleOwner) { playlist ->
             showPlaylist(playlist)
@@ -123,7 +134,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        tracksAdapterBottomSheet = TrackAdapter(ArrayList<Track>())
+        tracksAdapterBottomSheet = TrackAdapter(ArrayList<Track>(), TrackAdapter.LOW_RESOLUTION)
         recyclerViewBottomSheet.adapter = tracksAdapterBottomSheet
     }
 
@@ -152,7 +163,7 @@ class PlaylistFragment : Fragment() {
         }
         tracksAdapterBottomSheet.itemLongClickListener = { position, tracks ->
             trackId = tracks.trackId
-            confirmDialog.show()
+            confirmDialogDeleteTrack.show()
         }
 
         share.setOnClickListener(){
@@ -161,6 +172,7 @@ class PlaylistFragment : Fragment() {
 
         more.setOnClickListener(){
             bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetContainerMore.visibility = View.VISIBLE
 
             if(coverPlaylist.drawable != null) infoPlaylistMore.coverPlaylist.setImageDrawable(coverPlaylist.drawable)
             infoPlaylistMore.namePlaylist.text = namePlaylist.text
@@ -172,12 +184,10 @@ class PlaylistFragment : Fragment() {
         }
 
         buttonDeletePlaylist.setOnClickListener(){
-            viewModel.deletePlaylist()
-            findNavController().navigateUp()
+            confirmDialogDeletePlaylist.show()
         }
 
         buttonEditPlaylist.setOnClickListener(){
-            bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
             sendToEditPlaylist(playlistId!!)
         }
 
@@ -218,7 +228,7 @@ class PlaylistFragment : Fragment() {
         buttonEditPlaylist = binding.buttonEditPlaylist
         buttonDeletePlaylist = binding.buttonDeletePlaylist
 
-        confirmDialog = MaterialAlertDialogBuilder(requireContext())
+        confirmDialogDeleteTrack = MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.delete_track)
             .setMessage("")
             .setPositiveButton(R.string.yes) { dialog, which ->
@@ -227,15 +237,28 @@ class PlaylistFragment : Fragment() {
             }
             .setNegativeButton(R.string.no) { dialog, which -> }
 
+        confirmDialogDeletePlaylist = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.delete_playlist_message)
+            .setMessage("")
+            .setPositiveButton(R.string.yes) { dialog, which ->
+                if (playlistId == null) return@setPositiveButton
+                viewModel.deletePlaylist()
+                findNavController().navigateUp()
+            }
+            .setNegativeButton(R.string.no) { dialog, which -> }
+
         bottomSheetContainerTracks = binding.bottomSheet
         bottomSheetContainerMore = binding.bottomSheetMore
 
         bottomSheetBehaviorTracks = BottomSheetBehavior.from(bottomSheetContainerTracks).apply {
             state = BottomSheetBehavior.STATE_COLLAPSED
+            peekHeight = (resources.displayMetrics.heightPixels.toFloat() * 0.33f).toInt()
         }
 
         bottomSheetBehaviorMore = BottomSheetBehavior.from(bottomSheetContainerMore).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
+            peekHeight = (resources.displayMetrics.heightPixels.toFloat() * 0.45f).toInt()
+            bottomSheetContainerMore.visibility = View.GONE
         }
     }
 
@@ -260,6 +283,8 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun sendToEditPlaylist(playlistId: Int) {
+        bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetContainerMore.visibility = View.GONE
         findNavController().navigate(
             R.id.action_playlistFragment_to_editPlaylistFragment,
             EditPlaylistFragment.createArgs(playlistId)
