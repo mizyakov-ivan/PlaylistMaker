@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.core.net.toUri
 import com.practicum.playlistmaker.db.data.entity.PlaylistEntity
 import com.practicum.playlistmaker.db.data.entity.TrackInPlaylistEntity
-import com.practicum.playlistmaker.new_playlist.domain.model.Playlist
+import com.practicum.playlistmaker.newplaylist.domain.model.Playlist
 import com.practicum.playlistmaker.player.domain.model.Track
 import java.text.SimpleDateFormat
 import java.util.Date

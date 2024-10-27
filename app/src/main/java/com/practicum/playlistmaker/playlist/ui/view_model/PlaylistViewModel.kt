@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.db.domain.api.PlaylistDbInteractor
-import com.practicum.playlistmaker.new_playlist.domain.model.Playlist
+import com.practicum.playlistmaker.newplaylist.domain.model.Playlist
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.playlist.domain.api.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.ui.models.SharePlaylistStateInterface

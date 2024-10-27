@@ -8,7 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorSecondary"
     android:theme="@style/Theme.PlaylistMaker"
-    tools:context="com.practicum.playlistmaker.new_playlist.ui.fragment.NewPlaylistFragment">
+    tools:context="com.practicum.playlistmaker.newplaylist.ui.fragment.NewPlaylistFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"

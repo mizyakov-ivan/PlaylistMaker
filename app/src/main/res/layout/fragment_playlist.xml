@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/light_gray"
     android:theme="@style/Theme.PlaylistMaker"
-    tools:context="com.practicum.playlistmaker.new_playlist.ui.fragment.NewPlaylistFragment">
+    tools:context="com.practicum.playlistmaker.newplaylist.ui.fragment.NewPlaylistFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"
