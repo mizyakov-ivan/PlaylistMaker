@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.db.domain.api.FavoriteTrackInteractor
-import com.practicum.playlistmaker.db.domain.api.PlaylistInteractor
-import com.practicum.playlistmaker.media_library.ui.models.PlaylistStateInterface
+import com.practicum.playlistmaker.db.domain.api.PlaylistDbInteractor
+import com.practicum.playlistmaker.media_library.ui.models.PlaylistsStateInterface
 import com.practicum.playlistmaker.new_playlist.domain.model.Playlist
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.models.LikeStateInterface
@@ -23,7 +23,7 @@ class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
     private val trackId: Int,
     private val favoriteTrackInteractor: FavoriteTrackInteractor,
-    private val playlistInteractor: PlaylistInteractor,
+    private val playlistDbInteractor: PlaylistDbInteractor,
     ) : ViewModel() {
 
     init {
@@ -50,7 +50,7 @@ class PlayerViewModel(
     private val timerLiveData = MutableLiveData<String>()
     private val trackStateLiveData = MutableLiveData<Track>()
     private val isFavoriteStateLiveData = MutableLiveData<LikeStateInterface>()
-    private val playlistStateLiveData = MutableLiveData<PlaylistStateInterface>()
+    private val playlistsStateLiveData = MutableLiveData<PlaylistsStateInterface>()
     private val trackInPlaylistState = MutableLiveData<TrackInPlaylistStateInterface?>()
 
     fun observeTrackState(): LiveData<Track> {
@@ -69,7 +69,7 @@ class PlayerViewModel(
         return timerLiveData
     }
 
-    fun observePlaylistState(): LiveData<PlaylistStateInterface> = playlistStateLiveData
+    fun observePlaylistState(): LiveData<PlaylistsStateInterface> = playlistsStateLiveData
     fun observeTrackInPlaylistState(): LiveData<TrackInPlaylistStateInterface?> =
         trackInPlaylistState
 
@@ -203,9 +203,9 @@ class PlayerViewModel(
     }
     fun showPlaylist() {
         viewModelScope.launch {
-            playlistInteractor.getPlaylists().collect() { playlists ->
-                if (playlists.isEmpty()) playlistStateLiveData.postValue(PlaylistStateInterface.PlaylistsIsEmpty)
-                else playlistStateLiveData.postValue(PlaylistStateInterface.Playlists(playlists))
+            playlistDbInteractor.getPlaylists().collect() { playlists ->
+                if (playlists.isEmpty()) playlistsStateLiveData.postValue(PlaylistsStateInterface.PlaylistsIsEmpty)
+                else playlistsStateLiveData.postValue(PlaylistsStateInterface.Playlists(playlists))
             }
         }
     }
@@ -215,7 +215,7 @@ class PlayerViewModel(
             trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackOnPlaylist(playlist.playListName))
         } else {
             viewModelScope.launch {
-                playlistInteractor.insertTrackInPlaylist(
+                playlistDbInteractor.insertTrackInPlaylist(
                     sendTrack!!,
                     playlist,
                     tracksId

@@ -10,6 +10,7 @@
     <dimen name="s_icon_size">24dp</dimen>
     <dimen name="s_text_size">16sp</dimen>
     <dimen name="_16dp">14dp</dimen>
+    <dimen name="_12dp">12dp</dimen>
     <dimen name="ma_button_padding">8dp</dimen>
     <dimen name="s_medium_padding">24dp</dimen>
     <dimen name="margin_edit_text">16dp</dimen>
@@ -31,6 +32,8 @@
     <dimen name="t_size_14">14sp</dimen>
     <dimen name="t_size_20">20sp</dimen>
     <dimen name="t_size_13">13sp</dimen>
+    <dimen name="t_size_24">24sp</dimen>
+    <dimen name="t_size_18">18sp</dimen>
     <dimen name="padding_text">12dp</dimen>
     <dimen name="padding_40">40dp</dimen>
     <dimen name="size_19sp">19sp</dimen>

@@ -11,26 +11,28 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
-import com.practicum.playlistmaker.media_library.ui.adapter.PlaylistAdapter
-import com.practicum.playlistmaker.media_library.ui.models.PlaylistStateInterface
-import com.practicum.playlistmaker.media_library.ui.view_model.PlaylistViewModel
+import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.practicum.playlistmaker.media_library.ui.adapter.PlaylistsAdapter
+import com.practicum.playlistmaker.media_library.ui.models.PlaylistsStateInterface
+import com.practicum.playlistmaker.media_library.ui.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.new_playlist.domain.model.Playlist
+import com.practicum.playlistmaker.playlist.ui.fragment.PlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistFragment: Fragment() {
+
+class PlaylistsFragment: Fragment() {
     companion object{
-        fun newInstance() = PlaylistFragment()
+        fun newInstance() = PlaylistsFragment()
     }
 
     private lateinit var buttonNewPlaylist: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var placeholderNoPlaylist:LinearLayout
-    private lateinit var playlistAdapter: PlaylistAdapter
+    private lateinit var playlistsAdapter: PlaylistsAdapter
 
-    private val playlistViewModel: PlaylistViewModel by viewModel()
+    private val playlistsViewModel: PlaylistsViewModel by viewModel()
 
-    private var _binding: FragmentPlaylistBinding? = null
+    private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -38,7 +40,7 @@ class PlaylistFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPlaylistBinding.inflate(inflater, container, false)
+        _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -51,17 +53,17 @@ class PlaylistFragment: Fragment() {
 
         setListeners()
 
-        playlistViewModel.observeState().observe(viewLifecycleOwner){
+        playlistsViewModel.observeState().observe(viewLifecycleOwner){
             render(it)
         }
 
-        playlistViewModel.showPlaylist()
+        playlistsViewModel.showPlaylist()
     }
 
-    private fun render(state: PlaylistStateInterface) {
+    private fun render(state: PlaylistsStateInterface) {
         when (state){
-            is PlaylistStateInterface.PlaylistsIsEmpty -> showPlaceholder()
-            is PlaylistStateInterface.Playlists -> showPlaylists(state.playlists)
+            is PlaylistsStateInterface.PlaylistsIsEmpty -> showPlaceholder()
+            is PlaylistsStateInterface.Playlists -> showPlaylists(state.playlists)
         }
     }
 
@@ -77,16 +79,22 @@ class PlaylistFragment: Fragment() {
     }
 
     private fun initAdapter(){
-        playlistAdapter = PlaylistAdapter(ArrayList<Playlist>())
+        playlistsAdapter = PlaylistsAdapter(ArrayList<Playlist>())
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        recyclerView.adapter = playlistAdapter
+        recyclerView.adapter = playlistsAdapter
     }
 
     private fun setListeners() {
         buttonNewPlaylist.setOnClickListener(){
             sendToNewPlaylist()
         }
+
+        playlistsAdapter.itemClickListener = {position, playlist ->
+            sendToPlaylist(playlist.id)
+        }
     }
+
+
 
     private fun sendToNewPlaylist() {
         findNavController().navigate(
@@ -100,8 +108,15 @@ class PlaylistFragment: Fragment() {
     }
 
     private fun showPlaylists(playlists : List<Playlist>){
-        playlistAdapter.setPlaylists(playlists)
+        playlistsAdapter.setPlaylists(playlists)
         placeholderNoPlaylist.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
+    }
+
+    private fun sendToPlaylist(playlistId: Int) {
+        findNavController().navigate(
+            R.id.action_mediaLibraryFragment_to_playlistFragment,
+            PlaylistFragment.createArgs(playlistId)
+        )
     }
 }

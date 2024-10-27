@@ -2,11 +2,11 @@ package com.practicum.playlistmaker.media_library.ui.models
 
 import com.practicum.playlistmaker.new_playlist.domain.model.Playlist
 
-interface PlaylistStateInterface {
+interface PlaylistsStateInterface {
 
-    object PlaylistsIsEmpty : PlaylistStateInterface
+    object PlaylistsIsEmpty : PlaylistsStateInterface
 
     data class Playlists(
         val playlists: List<Playlist>,
-    ) : PlaylistStateInterface
+    ) : PlaylistsStateInterface
 }

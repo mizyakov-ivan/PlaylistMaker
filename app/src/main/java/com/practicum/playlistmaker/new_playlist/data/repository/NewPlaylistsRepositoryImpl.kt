@@ -6,13 +6,13 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import androidx.core.net.toUri
-import com.practicum.playlistmaker.new_playlist.domain.api.NewPlaylistRepository
+import com.practicum.playlistmaker.new_playlist.domain.api.NewPlaylistsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
 import java.io.FileOutputStream
 
-class NewPlaylistRepositoryImpl(private val context: Context): NewPlaylistRepository {
+class NewPlaylistsRepositoryImpl(private val context: Context): NewPlaylistsRepository {
     override suspend fun saveImageToPrivateStorage(uri: Uri, albumName: String): Flow<Uri> = flow {
         val filePath = File(
             context
