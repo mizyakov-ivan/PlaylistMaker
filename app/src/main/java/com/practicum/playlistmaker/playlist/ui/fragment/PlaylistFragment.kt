@@ -207,7 +207,7 @@ class PlaylistFragment : Fragment() {
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                //overlay.alpha = slideOffset
+                overlay.alpha = slideOffset
             }
         })
     }
@@ -280,6 +280,15 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun showToast(messageToast: String) {
+        // Получаем количество треков
+        val trackCount = quantityTracks.text.toString().filter { it.isDigit() }.toIntOrNull() ?: 0
+        // Проверка на наличие треков в плейлисте
+        if (trackCount == 0) {
+            // Скрываем меню, если треков нет
+            bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
+            bottomSheetContainerMore.visibility = View.GONE
+        }
+        // Показ сообщения Toast
         val toast = Toast.makeText(requireContext(), messageToast, Toast.LENGTH_LONG)
         toast.show()
     }

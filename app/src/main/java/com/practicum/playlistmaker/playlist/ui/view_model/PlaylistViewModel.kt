@@ -41,25 +41,28 @@ class PlaylistViewModel(
         viewModelScope.launch {
             playlistDbInteractor.getPlaylistById(playlistId).collect { playlistById ->
                 playlist = playlistById
-                playlistStateLiveData.postValue(playlist!!)
-                getTrackInPlaylist(playlist!!)
+                playlist?.let {
+                    playlistStateLiveData.postValue(it)
+                    getTrackInPlaylist(it)
+                }
             }
         }
     }
 
     private fun getTrackInPlaylist(playlist: Playlist) {
         if (playlist.tracksList.isNullOrEmpty()) {
-            getTrackTime(arrayListOf())
+            getTrackTime(emptyList())
             getQuantityTrack(0)
             return
         }
         viewModelScope.launch {
-            playlistInteractor.getTrackInPlaylist(playlist.tracksList!!).collect() {
-                trackInPlaylist = it
-                tracksInPlaylistStateLiveData.postValue(it)
-                tracksInPlaylistStateLiveData.postValue(it.reversed())
-                getTrackTime(it)
-                getQuantityTrack(playlist.quantityTracks)
+            playlist.tracksList?.let { trackList ->
+                playlistInteractor.getTrackInPlaylist(trackList).collect { tracks ->
+                    trackInPlaylist = tracks
+                    tracksInPlaylistStateLiveData.postValue(tracks.reversed())
+                    getTrackTime(tracks)
+                    getQuantityTrack(playlist.quantityTracks)
+                }
             }
         }
     }
@@ -118,6 +121,7 @@ class PlaylistViewModel(
             append(trackMessage)
         }
     }
+
     fun deletePlaylist() {
         viewModelScope.launch {
             playlistDbInteractor.deletePlayList(playlist!!)
