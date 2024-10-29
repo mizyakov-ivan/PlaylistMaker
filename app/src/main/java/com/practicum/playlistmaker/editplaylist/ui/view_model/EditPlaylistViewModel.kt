@@ -15,34 +15,33 @@ class EditPlaylistViewModel(
     private val playlistId: Int
 ) : NewPlaylistViewModel(playlistDbInteractor, newPlaylistInteractor) {
 
-    var playlist: Playlist? = null
-
     private val playlistStateLiveData = MutableLiveData<Playlist>()
 
     fun observeStatePlaylist(): LiveData<Playlist> = playlistStateLiveData
 
-    fun getInfoPlaylist(){
+    fun getInfoPlaylist() {
         viewModelScope.launch {
             playlistDbInteractor.getPlaylistById(playlistId).collect { playlistById ->
-                playlist = playlistById
-                playlistStateLiveData.postValue(playlist!!)
-                if (!playlist!!.uriCover.toString().isNullOrEmpty()) uriCover = playlist!!.uriCover
+                playlistStateLiveData.postValue(playlistById)
+                if (!playlistById.uriCover.toString().isNullOrEmpty()) uriCover = playlistById.uriCover
             }
         }
     }
 
     fun editPlaylistClicked(playlistName: String, playlistDescription: String) {
         viewModelScope.launch {
-            playlistDbInteractor.updatePlaylist(
-                Playlist(
-                    id = playlistId,
-                    playListName = playlistName,
-                    playlistDescription = playlistDescription,
-                    uriCover = uriCover,
-                    tracksList = playlist!!.tracksList,
-                    quantityTracks = playlist!!.quantityTracks
+            playlistStateLiveData.value?.let { currentPlaylist ->
+                playlistDbInteractor.updatePlaylist(
+                    Playlist(
+                        id = playlistId,
+                        playListName = playlistName,
+                        playlistDescription = playlistDescription,
+                        uriCover = uriCover,
+                        tracksList = currentPlaylist.tracksList,
+                        quantityTracks = currentPlaylist.quantityTracks
+                    )
                 )
-            )
+            }
         }
     }
 }

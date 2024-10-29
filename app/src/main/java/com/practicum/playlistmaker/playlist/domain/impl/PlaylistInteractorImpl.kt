@@ -13,31 +13,21 @@ class PlaylistInteractorImpl(
     private val playListDbRepository: PlayListDbRepository,
     private val externalNavigatorPlaylist: ExternalNavigatorPlaylist
 ) : PlaylistInteractor {
+
     private suspend fun getAllTrackInPlaylist(): Flow<List<Track>> {
         return playListDbRepository.getAllTrackInPlaylists()
     }
 
-    override suspend fun getTrackInPlaylist(idTracksInPlaylist: String): Flow<List<Track>> = flow{
+    override suspend fun getTrackInPlaylist(idTracksInPlaylist: String): Flow<List<Track>> = flow {
+        val idTracks = playlistRepository.getListIdTracks(idTracksInPlaylist)
 
-        var idTracks = arrayListOf<Int>() as List<Int>
-        var allTrackInPlaylists = arrayListOf<Track>()
-        val tracksInPlaylist = arrayListOf<Track>()
-
-        idTracks = playlistRepository.getListIdTracks(idTracksInPlaylist)
-
-        getAllTrackInPlaylist().collect(){allTrack ->
-            allTrackInPlaylists = allTrack as ArrayList<Track>
+        getAllTrackInPlaylist().collect { allTracks ->
+            val tracksInPlaylist = allTracks.filter { it.trackId in idTracks }
+            emit(tracksInPlaylist)
         }
-
-        allTrackInPlaylists.map { track ->
-            if (track.trackId in idTracks)
-                tracksInPlaylist.add(track)
-        }
-
-        emit(tracksInPlaylist)
     }
 
-    override fun sharePlaylist(message: String){
+    override fun sharePlaylist(message: String) {
         externalNavigatorPlaylist.shareLink(message)
     }
 }

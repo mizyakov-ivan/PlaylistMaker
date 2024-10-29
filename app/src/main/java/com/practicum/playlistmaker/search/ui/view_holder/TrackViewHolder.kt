@@ -11,23 +11,28 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.util.TimeUtils.formatTrackDuraction
 import com.practicum.playlistmaker.player.domain.model.Track
 
-class TrackViewHolder(parentView: ViewGroup, private val resolution: String) :
+class TrackViewHolder(parentView: ViewGroup, private val resolution: Resolution) :
     RecyclerView.ViewHolder(
         LayoutInflater.from(parentView.context)
             .inflate(R.layout.track_view, parentView, false)
     ) {
 
-    //Ссылки на View-элементы в track_view (View которыми наполнится RecyclerView)
+    enum class Resolution {
+        HIGH, LOW
+    }
+
     private val trackName: TextView = itemView.findViewById(R.id.trackName)
     private val artistName: TextView = itemView.findViewById(R.id.artistName)
     private val trackTime: TextView = itemView.findViewById(R.id.trackTime)
     private val artworkUrl100: ImageView = itemView.findViewById(R.id.artwork_url_100)
-    fun bind(model: Track){
+
+    fun bind(model: Track) {
         val roundingRadius = itemView.resources.getDimensionPixelSize(R.dimen.s_padding)
-        //Присваивание данных параметрам view-элементов из объекта Track
+
         trackName.text = model.trackName
         artistName.text = model.artistName
         trackTime.text = formatTrackDuraction(model.trackTimeMillis.toInt())
+
         fun setImage(artworkUrl: String) {
             Glide.with(itemView)
                 .load(artworkUrl)
@@ -38,11 +43,11 @@ class TrackViewHolder(parentView: ViewGroup, private val resolution: String) :
         }
 
         when (resolution) {
-            "high resolution" -> {
+            Resolution.HIGH -> {
                 setImage(model.artworkUrl100)
             }
 
-            "low resolution" -> {
+            Resolution.LOW -> {
                 setImage(model.artworkUrl60)
             }
         }

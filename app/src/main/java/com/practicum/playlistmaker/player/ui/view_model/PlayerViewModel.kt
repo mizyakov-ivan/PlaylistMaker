@@ -211,17 +211,16 @@ class PlayerViewModel(
     }
 
     fun onPlaylistClick(tracksId: List<Int>, playlist: Playlist) {
-        if (sendTrack!!.trackId in tracksId) {
-            trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackOnPlaylist(playlist.playListName))
-        } else {
-            viewModelScope.launch {
-                playlistDbInteractor.insertTrackInPlaylist(
-                    sendTrack!!,
-                    playlist,
-                    tracksId
-                )
+        val track = sendTrack
+        if (track != null) {
+            if (track.trackId in tracksId) {
+                trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackOnPlaylist(playlist.playListName))
+            } else {
+                viewModelScope.launch {
+                    playlistDbInteractor.insertTrackInPlaylist(track, playlist, tracksId)
+                }
+                trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackAddToPlaylist(playlist.playListName))
             }
-            trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackAddToPlaylist(playlist.playListName))
         }
     }
 

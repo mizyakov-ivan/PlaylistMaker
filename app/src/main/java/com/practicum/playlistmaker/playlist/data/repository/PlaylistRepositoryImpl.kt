@@ -6,7 +6,7 @@ import com.practicum.playlistmaker.playlist.domain.api.PlaylistRepository
 
 class PlaylistRepositoryImpl(private val gson: Gson) : PlaylistRepository {
     override fun getListIdTracks(idTracksInPlaylist: String): List<Int> {
-        val typeTokenArrayList = object : TypeToken<ArrayList<Int>>() {}.type
-        return gson.fromJson<ArrayList<Int>>(idTracksInPlaylist,typeTokenArrayList) ?: arrayListOf()
+        val typeTokenList = object : TypeToken<List<Int>>() {}.type
+        return gson.fromJson(idTracksInPlaylist, typeTokenList) ?: emptyList()
     }
 }

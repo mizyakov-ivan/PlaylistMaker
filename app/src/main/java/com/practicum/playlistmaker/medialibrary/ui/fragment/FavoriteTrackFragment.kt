@@ -16,6 +16,7 @@ import com.practicum.playlistmaker.medialibrary.ui.view_model.FavoriteTrackViewM
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
 import com.practicum.playlistmaker.search.ui.adapter.TrackAdapter
+import com.practicum.playlistmaker.search.ui.view_holder.TrackViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteTrackFragment : Fragment() {
@@ -90,7 +91,7 @@ class FavoriteTrackFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        favoriteTracksAdapter = TrackAdapter(ArrayList<Track>(), TrackAdapter.HIGH_RESOLUTION)
+        favoriteTracksAdapter = TrackAdapter(ArrayList<Track>(), TrackViewHolder.Resolution.HIGH)
         recyclerView.adapter = favoriteTracksAdapter
     }
 

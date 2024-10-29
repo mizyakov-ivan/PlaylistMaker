@@ -34,7 +34,7 @@ class PlaylistDbInteractorImpl(
         playListDbRepository.deleteTrackInPlaylist(playlist, trackId)
     }
 
-    override suspend fun insertTrackInPlaylist(track: Track, playlist: Playlist, tracksId: List<Int>){
-        playListDbRepository.insertTrackInPlaylist(track, playlist, tracksId as ArrayList<Int>)
+    override suspend fun insertTrackInPlaylist(track: Track, playlist: Playlist, tracksId: List<Int>) {
+        playListDbRepository.insertTrackInPlaylist(track, playlist, tracksId)
     }
 }

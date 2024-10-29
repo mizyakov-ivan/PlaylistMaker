@@ -26,9 +26,9 @@ class PlayListDbRepositoryImpl(
     override suspend fun deletePlayList(playlist: Playlist) {
         appDataBase.playlistDao().deletePlayList(converterFromPlaylistEntity(playlist))
         val trackIdInPlaylist =
-            gson.fromJson<ArrayList<Int>>(playlist!!.tracksList, typeTokenArrayList)
+            gson.fromJson<ArrayList<Int>>(playlist.tracksList, typeTokenArrayList)
                 ?: arrayListOf()
-        trackIdInPlaylist.forEach(){trackId ->
+        trackIdInPlaylist.forEach{trackId ->
             checkDeleteTrackFromAllPlaylist(trackId)
         }
     }
@@ -50,12 +50,11 @@ class PlayListDbRepositoryImpl(
     override suspend fun insertTrackInPlaylist(
         track: Track,
         playlist: Playlist,
-        tracksId: ArrayList<Int>,
+        tracksId: List<Int>,
     ) {
         appDataBase.trackInPlaylistDao().insertTrackInPlaylist(converterFromTrack(track))
-        tracksId.add(track.trackId)
-        playlist.tracksList = gson.toJson(tracksId)
-        playlist.quantityTracks += 1
+        playlist.tracksList = gson.toJson(tracksId + track.trackId)
+        playlist.quantityTracks++
         appDataBase.playlistDao().updatePlaylist(converterFromPlaylistEntity(playlist))
     }
 
@@ -88,19 +87,20 @@ class PlayListDbRepositoryImpl(
     }
 
     override suspend fun deleteTrackInPlaylist(playlist: Playlist?, trackId: Int) {
-        val trackIdInPlaylist =
-            gson.fromJson<ArrayList<Int>>(playlist!!.tracksList, typeTokenArrayList)
-                ?: arrayListOf()
-        trackIdInPlaylist.removeIf { it == trackId }
-        playlist.tracksList = gson.toJson(trackIdInPlaylist)
-        playlist.quantityTracks -= 1
-        appDataBase.playlistDao().updatePlaylist(converterFromPlaylistEntity(playlist))
-        checkDeleteTrackFromAllPlaylist(trackId)
+        playlist?.let {
+            val trackIdInPlaylist =
+                gson.fromJson<ArrayList<Int>>(it.tracksList, typeTokenArrayList) ?: arrayListOf()
+            trackIdInPlaylist.removeIf { it == trackId }
+            it.tracksList = gson.toJson(trackIdInPlaylist)
+            it.quantityTracks--
+            appDataBase.playlistDao().updatePlaylist(converterFromPlaylistEntity(it))
+            checkDeleteTrackFromAllPlaylist(trackId)
+        }
     }
 
     private suspend fun checkDeleteTrackFromAllPlaylist(trackId: Int) {
         val playlists = appDataBase.playlistDao().getPlaylists()
-        playlists.forEach() { playlistEntity ->
+        playlists.forEach{ playlistEntity ->
             if (playlistEntity.tracksList.isNullOrEmpty()) return@forEach
             val tracksInPlaylist =
                 gson.fromJson<ArrayList<Int>>(playlistEntity.tracksList, typeTokenArrayList)

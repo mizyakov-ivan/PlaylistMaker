@@ -21,7 +21,7 @@ class PlaylistViewModel(
 ) : ViewModel() {
 
     var playlist: Playlist? = null
-    private var trackInPlaylist = arrayListOf<Track>() as List<Track>
+    private var trackInPlaylist = listOf<Track>()
 
 
     private val playlistStateLiveData = MutableLiveData<Playlist>()
@@ -68,7 +68,7 @@ class PlaylistViewModel(
         var trackTime = 0
         if (trackInPlaylist!!.isEmpty()) trackTime = 0
         else {
-            trackInPlaylist.forEach { track ->
+            trackInPlaylist.forEach{ track ->
                 trackTime += track.trackTimeMillis.toInt()
             }
         }
@@ -105,20 +105,19 @@ class PlaylistViewModel(
     }
 
     private fun shareMessage(wordTrack: String): String {
-        var trackMessage: String = ""
-        var i = 1
-        trackInPlaylist.forEach(){track ->
-            trackMessage += i.toString() + "." + " " + track.artistName + " - " + track.trackName +
-                    " " + "(" + TimeUtils.formatTrackDuraction(track.trackTimeMillis.toInt()) + ")" + "\n"
-            i++
+        val trackMessage = StringBuilder()
+        trackInPlaylist.forEachIndexed { index, track ->
+            trackMessage.append("${index + 1}. ${track.artistName} - ${track.trackName} ")
+                .append("(${TimeUtils.formatTrackDuraction(track.trackTimeMillis.toInt())})\n")
         }
-        val message: String =
-            playlist!!.playListName + "\n" + playlist!!.playlistDescription +
-                    "\n" + wordTrack + "\n" + trackMessage
 
-        return message
+        return buildString {
+            append(playlist?.playListName).append("\n")
+            append(playlist?.playlistDescription).append("\n")
+            append(wordTrack).append("\n")
+            append(trackMessage)
+        }
     }
-
     fun deletePlaylist() {
         viewModelScope.launch {
             playlistDbInteractor.deletePlayList(playlist!!)

@@ -25,6 +25,7 @@ import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
 import com.practicum.playlistmaker.playlist.ui.models.SharePlaylistStateInterface
 import com.practicum.playlistmaker.playlist.ui.view_model.PlaylistViewModel
 import com.practicum.playlistmaker.search.ui.adapter.TrackAdapter
+import com.practicum.playlistmaker.search.ui.view_holder.TrackViewHolder
 import com.practicum.playlistmaker.util.GetWord
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -134,7 +135,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        tracksAdapterBottomSheet = TrackAdapter(ArrayList<Track>(), TrackAdapter.LOW_RESOLUTION)
+        tracksAdapterBottomSheet = TrackAdapter(ArrayList<Track>(), TrackViewHolder.Resolution.LOW)
         recyclerViewBottomSheet.adapter = tracksAdapterBottomSheet
     }
 
@@ -184,6 +185,7 @@ class PlaylistFragment : Fragment() {
         }
 
         buttonDeletePlaylist.setOnClickListener(){
+            bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
             confirmDialogDeletePlaylist.show()
         }
 
