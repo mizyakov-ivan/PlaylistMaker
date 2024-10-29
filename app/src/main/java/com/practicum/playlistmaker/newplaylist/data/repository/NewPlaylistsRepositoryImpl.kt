@@ -22,7 +22,8 @@ class NewPlaylistsRepositoryImpl(private val context: Context): NewPlaylistsRepo
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
-        val file = File(filePath, "cover_$albumName.jpg")
+        val timestamp = System.currentTimeMillis()
+        val file = File(filePath, "cover_${albumName}_$timestamp.jpg")
         val inputStream = context.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
 
