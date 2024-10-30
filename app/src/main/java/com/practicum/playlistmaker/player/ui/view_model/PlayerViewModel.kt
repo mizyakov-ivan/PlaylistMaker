@@ -113,12 +113,13 @@ class PlayerViewModel(
 
 
     private fun startPreparePlayer(previewUrl: String?) {
-        playerInteractor.preparePlayer(previewUrl)
-        playerState = PlayerState.STATE_PREPARED
-        playerStateLiveData.postValue(PlayerStateInterface.Prepare)
-        timerJob?.cancel()
+        previewUrl?.let {
+            playerInteractor.preparePlayer(it)
+            playerState = PlayerState.STATE_PREPARED
+            playerStateLiveData.postValue(PlayerStateInterface.Prepare)
+            timerJob?.cancel()
+        }
     }
-
     private fun defaultPlayer() {
         pausePlayer()
         playerState = PlayerState.STATE_DEFAULT
@@ -175,22 +176,30 @@ class PlayerViewModel(
         }
     }
     fun onFavoriteClicked() {
-        viewModelScope.launch {
-            if (sendTrack!!.isFavorite) {
-                sendTrack!!.isFavorite = false
-                favoriteTrackInteractor.deleteTrackOnFavorite(sendTrack!!)
-                isFavoriteStateLiveData.postValue(LikeStateInterface.NotLikeTrack)
-            } else {
-                sendTrack!!.isFavorite = true
-                favoriteTrackInteractor.insertFavoriteTrack(sendTrack!!)
-                isFavoriteStateLiveData.postValue(LikeStateInterface.LikeTrack)
+        sendTrack?.let { track ->
+            viewModelScope.launch {
+                if (track.isFavorite) {
+                    track.isFavorite = false
+                    favoriteTrackInteractor.deleteTrackOnFavorite(track)
+                    isFavoriteStateLiveData.postValue(LikeStateInterface.NotLikeTrack)
+                } else {
+                    track.isFavorite = true
+                    favoriteTrackInteractor.insertFavoriteTrack(track)
+                    isFavoriteStateLiveData.postValue(LikeStateInterface.LikeTrack)
+                }
             }
         }
     }
 
     fun checkFavorite(sendTrack: Track?) {
-        if (sendTrack!!.isFavorite) isFavoriteStateLiveData.postValue(LikeStateInterface.LikeTrack)
-        else isFavoriteStateLiveData.postValue(LikeStateInterface.NotLikeTrack)
+        sendTrack?.let {
+            val isFavorite = it.isFavorite
+            isFavoriteStateLiveData.postValue(
+                if (isFavorite) LikeStateInterface.LikeTrack else LikeStateInterface.NotLikeTrack
+            )
+        } ?: run {
+            isFavoriteStateLiveData.postValue(LikeStateInterface.NotLikeTrack)
+        }
     }
 
     private fun getTrackFromDataBase(trackId: Int) {

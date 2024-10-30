@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.search.ui.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -71,6 +72,7 @@ class SearchViewModel(private val searchInteractor: SearchInteractor): ViewModel
 
     fun loadTracks(searchText: String) {
         if (searchText.isEmpty()) return
+        renderState(SearchStateInterface.changeTextSearch)
         renderState(SearchStateInterface.Loading)
 
         viewModelScope.launch {

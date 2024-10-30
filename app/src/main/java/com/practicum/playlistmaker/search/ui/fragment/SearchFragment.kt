@@ -115,8 +115,8 @@ class SearchFragment : Fragment() {
             searchViewModel.clickButtonClearHistory()
         }
 
-        buttonRefresh.setOnClickListener() {
-            searchTracks()
+        buttonRefresh.setOnClickListener {
+            searchViewModel.loadTracks(textSearch())
         }
 
         //Поиск трека

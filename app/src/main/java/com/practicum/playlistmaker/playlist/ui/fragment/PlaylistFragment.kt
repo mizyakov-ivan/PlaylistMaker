@@ -97,12 +97,16 @@ class PlaylistFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
+        if (::bottomSheetBehaviorMore.isInitialized) {
+            bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
+        if (::bottomSheetBehaviorMore.isInitialized) {
+            bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
+        }
     }
 
     private fun setObserve() {
