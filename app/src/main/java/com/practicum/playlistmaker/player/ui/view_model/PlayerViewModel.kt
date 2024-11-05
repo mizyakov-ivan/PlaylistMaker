@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.db.domain.api.FavoriteTrackInteractor
-import com.practicum.playlistmaker.db.domain.api.PlaylistInteractor
-import com.practicum.playlistmaker.media_library.ui.models.PlaylistStateInterface
-import com.practicum.playlistmaker.new_playlist.domain.model.Playlist
+import com.practicum.playlistmaker.db.domain.api.PlaylistDbInteractor
+import com.practicum.playlistmaker.medialibrary.ui.models.PlaylistsStateInterface
+import com.practicum.playlistmaker.newplaylist.domain.model.Playlist
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.models.LikeStateInterface
 import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
@@ -23,7 +23,7 @@ class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
     private val trackId: Int,
     private val favoriteTrackInteractor: FavoriteTrackInteractor,
-    private val playlistInteractor: PlaylistInteractor,
+    private val playlistDbInteractor: PlaylistDbInteractor,
     ) : ViewModel() {
 
     init {
@@ -50,7 +50,7 @@ class PlayerViewModel(
     private val timerLiveData = MutableLiveData<String>()
     private val trackStateLiveData = MutableLiveData<Track>()
     private val isFavoriteStateLiveData = MutableLiveData<LikeStateInterface>()
-    private val playlistStateLiveData = MutableLiveData<PlaylistStateInterface>()
+    private val playlistsStateLiveData = MutableLiveData<PlaylistsStateInterface>()
     private val trackInPlaylistState = MutableLiveData<TrackInPlaylistStateInterface?>()
 
     fun observeTrackState(): LiveData<Track> {
@@ -69,7 +69,7 @@ class PlayerViewModel(
         return timerLiveData
     }
 
-    fun observePlaylistState(): LiveData<PlaylistStateInterface> = playlistStateLiveData
+    fun observePlaylistState(): LiveData<PlaylistsStateInterface> = playlistsStateLiveData
     fun observeTrackInPlaylistState(): LiveData<TrackInPlaylistStateInterface?> =
         trackInPlaylistState
 
@@ -113,12 +113,13 @@ class PlayerViewModel(
 
 
     private fun startPreparePlayer(previewUrl: String?) {
-        playerInteractor.preparePlayer(previewUrl)
-        playerState = PlayerState.STATE_PREPARED
-        playerStateLiveData.postValue(PlayerStateInterface.Prepare)
-        timerJob?.cancel()
+        previewUrl?.let {
+            playerInteractor.preparePlayer(it)
+            playerState = PlayerState.STATE_PREPARED
+            playerStateLiveData.postValue(PlayerStateInterface.Prepare)
+            timerJob?.cancel()
+        }
     }
-
     private fun defaultPlayer() {
         pausePlayer()
         playerState = PlayerState.STATE_DEFAULT
@@ -175,22 +176,30 @@ class PlayerViewModel(
         }
     }
     fun onFavoriteClicked() {
-        viewModelScope.launch {
-            if (sendTrack!!.isFavorite) {
-                sendTrack!!.isFavorite = false
-                favoriteTrackInteractor.deleteTrackOnFavorite(sendTrack!!)
-                isFavoriteStateLiveData.postValue(LikeStateInterface.NotLikeTrack)
-            } else {
-                sendTrack!!.isFavorite = true
-                favoriteTrackInteractor.insertFavoriteTrack(sendTrack!!)
-                isFavoriteStateLiveData.postValue(LikeStateInterface.LikeTrack)
+        sendTrack?.let { track ->
+            viewModelScope.launch {
+                if (track.isFavorite) {
+                    track.isFavorite = false
+                    favoriteTrackInteractor.deleteTrackOnFavorite(track)
+                    isFavoriteStateLiveData.postValue(LikeStateInterface.NotLikeTrack)
+                } else {
+                    track.isFavorite = true
+                    favoriteTrackInteractor.insertFavoriteTrack(track)
+                    isFavoriteStateLiveData.postValue(LikeStateInterface.LikeTrack)
+                }
             }
         }
     }
 
     fun checkFavorite(sendTrack: Track?) {
-        if (sendTrack!!.isFavorite) isFavoriteStateLiveData.postValue(LikeStateInterface.LikeTrack)
-        else isFavoriteStateLiveData.postValue(LikeStateInterface.NotLikeTrack)
+        sendTrack?.let {
+            val isFavorite = it.isFavorite
+            isFavoriteStateLiveData.postValue(
+                if (isFavorite) LikeStateInterface.LikeTrack else LikeStateInterface.NotLikeTrack
+            )
+        } ?: run {
+            isFavoriteStateLiveData.postValue(LikeStateInterface.NotLikeTrack)
+        }
     }
 
     private fun getTrackFromDataBase(trackId: Int) {
@@ -203,25 +212,24 @@ class PlayerViewModel(
     }
     fun showPlaylist() {
         viewModelScope.launch {
-            playlistInteractor.getPlaylists().collect() { playlists ->
-                if (playlists.isEmpty()) playlistStateLiveData.postValue(PlaylistStateInterface.PlaylistsIsEmpty)
-                else playlistStateLiveData.postValue(PlaylistStateInterface.Playlists(playlists))
+            playlistDbInteractor.getPlaylists().collect() { playlists ->
+                if (playlists.isEmpty()) playlistsStateLiveData.postValue(PlaylistsStateInterface.PlaylistsIsEmpty)
+                else playlistsStateLiveData.postValue(PlaylistsStateInterface.Playlists(playlists))
             }
         }
     }
 
     fun onPlaylistClick(tracksId: List<Int>, playlist: Playlist) {
-        if (sendTrack!!.trackId in tracksId) {
-            trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackOnPlaylist(playlist.playListName))
-        } else {
-            viewModelScope.launch {
-                playlistInteractor.insertTrackInPlaylist(
-                    sendTrack!!,
-                    playlist,
-                    tracksId
-                )
+        val track = sendTrack
+        if (track != null) {
+            if (track.trackId in tracksId) {
+                trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackOnPlaylist(playlist.playListName))
+            } else {
+                viewModelScope.launch {
+                    playlistDbInteractor.insertTrackInPlaylist(track, playlist, tracksId)
+                }
+                trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackAddToPlaylist(playlist.playListName))
             }
-            trackInPlaylistState.postValue(TrackInPlaylistStateInterface.TrackAddToPlaylist(playlist.playListName))
         }
     }
 

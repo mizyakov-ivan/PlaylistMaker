@@ -28,6 +28,7 @@ import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.ui.adapter.TrackAdapter
 import com.practicum.playlistmaker.search.ui.adapter.TrackHistoryAdapter
 import com.practicum.playlistmaker.search.ui.models.SearchStateInterface
+import com.practicum.playlistmaker.search.ui.view_holder.TrackViewHolder
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 class SearchFragment : Fragment() {
@@ -100,9 +101,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        tracksAdapter = TrackAdapter(ArrayList<Track>())
+        tracksAdapter = TrackAdapter(ArrayList<Track>(), TrackViewHolder.Resolution.HIGH)
         recyclerView.adapter = tracksAdapter
-        tracksHistoryAdapter = TrackHistoryAdapter(ArrayList<Track>())
+
+        tracksHistoryAdapter = TrackHistoryAdapter(ArrayList<Track>(), TrackViewHolder.Resolution.HIGH)
         recyclerViewHistory.adapter = tracksHistoryAdapter
     }
 
@@ -113,8 +115,8 @@ class SearchFragment : Fragment() {
             searchViewModel.clickButtonClearHistory()
         }
 
-        buttonRefresh.setOnClickListener() {
-            searchTracks()
+        buttonRefresh.setOnClickListener {
+            searchViewModel.loadTracks(textSearch())
         }
 
         //Поиск трека

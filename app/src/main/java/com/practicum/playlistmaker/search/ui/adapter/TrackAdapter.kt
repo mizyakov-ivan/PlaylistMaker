@@ -6,22 +6,33 @@ import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.search.ui.view_holder.TrackViewHolder
 
 class TrackAdapter(
-    private val tracks: ArrayList<Track>,
+    private val tracks: ArrayList<Track>, private val resolution: TrackViewHolder.Resolution
 ) : RecyclerView.Adapter<TrackViewHolder>() {
+
     var itemClickListener: ((Int, Track) -> Unit)? = null
+    var itemLongClickListener: ((Int, Track) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        return TrackViewHolder(parent)
+        return TrackViewHolder(parent, resolution)
     }
+
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val track = tracks[position]
         holder.bind(track)
-        holder.itemView.setOnClickListener(){
+        holder.itemView.setOnClickListener {
             itemClickListener?.invoke(position, track)
         }
+
+        holder.itemView.setOnLongClickListener {
+            itemLongClickListener?.invoke(position, track)
+            true
+        }
     }
+
     override fun getItemCount(): Int {
         return tracks.size
     }
+
     fun setTracks(newTracks: List<Track>?) {
         tracks.clear()
         if (!newTracks.isNullOrEmpty()) {
